@@ -8,6 +8,13 @@
 </head>
 <body>
     <div>
+        <figure>
+                <figcaption>Hikayeyi dinle</figcaption>
+                <audio src="ElevenLabs_2024-10-11T06_31_14_Rachel_pre_s50_sb75_se0_b_m2.mp3"></audio>
+                <a href="ElevenLabs_2024-10-11T06_31_14_Rachel_pre_s50_sb75_se0_b_m2.mp3">Dinle</a>
+            </figure>
+    </div>
+    <div>
         <img src="https://i.pinimg.com/564x/25/1c/02/251c02046d5721eac9ed2f86efaa0b80.jpg" alt="">
         <p>Kırmızı Başlıklı Kız, küçük bir köyde yaşayan sevimli bir kızdır. Annesi, ona hastalanan 
             büyükannesine götürmesi için bir sepet dolusu yiyecek verir ve kızı ormanın 
