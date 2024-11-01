@@ -1,0 +1,47 @@
+.container {
+    display: grid;
+    grid-template-areas:
+      "A A A"
+      "B C D"
+      "E E F"
+      "G G G";
+    grid-gap: 10px;
+    padding: 10px;
+  }
+
+  .container > div {
+    background-color: #b3d9ff;
+    padding: 20px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+.A { 
+    grid-area: A; 
+    background-color: darkblue !important; 
+}
+.B {
+    grid-area: B;
+    background-color: orange !important;    
+}
+.C { 
+    grid-area: C; 
+    background-color: greenyellow !important;
+}
+.D { 
+    grid-area: D; 
+    background-color: red !important;
+}
+.E { 
+    grid-area: E; 
+    background-color: yellow !important;
+}
+.F { 
+    grid-area: F; 
+    background-color: purple !important;
+}
+.G { 
+    grid-area: G; 
+    background-color: darkgreen !important;
+}
