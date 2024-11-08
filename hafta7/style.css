@@ -1,0 +1,74 @@
+div{
+    width: 100px;
+    height: 100px;
+    margin: 140px;
+    margin-left: 700px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #fff;
+    background-color: red;
+    padding: 10px;
+}
+.d1 {
+    background-color: #4CAF50;
+    animation: asagiyukari 2s infinite alternate;
+  }
+  
+@keyframes asagiyukari {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(100px);
+    }
+}
+.d2{
+    background-color: aqua;
+    animation: buyukucul 2s infinite alternate;
+}
+@keyframes buyukucul{
+    from{
+        width: 50px;
+        height: 50px;
+    }
+    to{
+        width: 80px;
+        height: 80px;
+    }
+}
+.d3{
+    background-color: chocolate;
+    animation: transparan 2s infinite alternate;
+}
+@keyframes transparan{
+    from{
+        opacity: 1;
+    }to{
+        opacity: 0.3;
+    }
+}
+.d4{
+    background-color: black;
+    animation: sagsol 2s infinite alternate;
+}
+@keyframes sagsol{
+    from{
+        transform: translateX(0);
+    }to{
+        transform: translateX(100px);
+    }
+}
+.d5{
+    background-color: green;
+    animation: donen 2s infinite alternate;
+}
+@keyframes donen{
+    from{
+        transform: rotate(0deg);
+    }
+    to{
+        transform: rotate(360deg);
+    }
+}
