@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .images {
+            display: flex;
+            justify-content: center;
+            margin: 20px;
+        }
+        .image {
+            width: 200px;
+            height: 200px;
+            margin: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="images">
+        <img id="img1" class="image">
+        <img id="img2" class="image">
+        <img id="img3" class="image">
+    </div>
+    <div>
+        <button onclick="toggleImage(1)">Resmi 1 Göster/Gizle</button>
+        <button onclick="toggleImage(2)">Resmi 2 Göster/Gizle</button>
+        <button onclick="toggleImage(3)">Resmi 3 Göster/Gizle</button>
+    </div>
+    <script>
+        const colors = ['#FF6347', '#32CD32', '#1E90FF', '#FFD700', '#8A2BE2', '#D2691E', '#DC143C', '#A52A2A', '#7FFF00', '#00008B'];
+        document.body.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+
+        const images = ['a1.jpg', 'a2.jpg', 'a3.jpg', 'a4.jpg', 'a5.jpg', 'a6.jpg', 'a7.jpg', 'a8.jpg', 'a9.jpg', 'a10.jpg'];
+
+        function setRandomImage(id) {
+            const img = document.getElementById(id);
+            const randomImage = images[Math.floor(Math.random() * images.length)];
+            img.src = randomImage;
+        }
+
+        setRandomImage('img1');
+        setRandomImage('img2');
+        setRandomImage('img3');
+        function toggleImage(imageNumber) {
+            const img = document.getElementById(`img${imageNumber}`);
+            if (img.style.display === 'none' || img.style.display === '') {
+                img.style.display = 'block';
+            } else {
+                img.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
