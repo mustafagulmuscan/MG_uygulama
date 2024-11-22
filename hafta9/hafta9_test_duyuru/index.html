@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rastgele Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .question {
+            margin: 20px 0;
+        }
+        .question h2 {
+            margin: 0;
+            font-size: 18px;
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+        .options li {
+            margin: 10px 0;
+        }
+        button {
+            background: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .result {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 20px;
+            color: #28a745;
+        }
+        /* Duyuru Penceresi */
+        .notification {
+            width: 300px;
+            padding: 20px;
+            background-color: #007BFF;
+            color: white;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-50px);
+            transition: opacity 1s ease, visibility 1s ease, transform 1s ease;
+        }
+        .notification.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div id="notification" class="notification">
+        Hoş geldiniz! Hadi teste başlayalım.
+    </div>
+
+    <div class="container">
+        <h1>Rastgele Test</h1>
+        <div id="quiz"></div>
+        <button onclick="submitQuiz()">Testi Bitir</button>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+       const questionPool = [
+            {
+                question: "HTML'de en büyük başlık etiketi hangisidir?",
+                options: ["<h6>", "<h1>", "<header>", "<head>"],
+                answer: "<h1>"
+            },
+            {
+                question: "CSS'te bir öğenin arka plan rengini değiştirmek için hangi özellik kullanılır?",
+                options: ["color", "background-color", "font-color", "bg-color"],
+                answer: "background-color"
+            },
+            {
+                question: "JavaScript'te hangi yöntem bir mesaj kutusu görüntüler?",
+                options: ["alert()", "message()", "prompt()", "console.log()"],
+                answer: "alert()"
+            },
+            {
+                question: "HTML'de bir bağlantı oluşturmak için hangi etiket kullanılır?",
+                options: ["<a>", "<link>", "<href>", "<url>"],
+                answer: "<a>"
+            },
+            {
+                question: "CSS'te id seçici nasıl tanımlanır?",
+                options: ["#", ".", "id:", "@"],
+                answer: "#"
+            },
+            {
+                question: "JavaScript'te bir değişken nasıl tanımlanır?",
+                options: ["var", "let", "const", "Hepsi"],
+                answer: "Hepsi"
+            },
+            {
+                question: "HTML'de bir resim eklemek için hangi etiket kullanılır?",
+                options: ["<image>", "<img>", "<picture>", "<src>"],
+                answer: "<img>"
+            },
+            {
+                question: "CSS'te yazı tipi boyutunu değiştirmek için hangi özellik kullanılır?",
+                options: ["font-size", "text-size", "size", "font-weight"],
+                answer: "font-size"
+            },
+            {
+                question: "JavaScript'te dizinin uzunluğunu öğrenmek için hangi özellik kullanılır?",
+                options: ["length", "size", "index", "count"],
+                answer: "length"
+            },
+            {
+                question: "HTML'de bir tablo oluşturmak için hangi etiketler kullanılır?",
+                options: ["<table>, <tr>, <td>", "<table>, <row>, <column>", "<table>, <thead>, <tfoot>", "<table>, <th>, <tr>"],
+                answer: "<table>, <tr>, <td>"
+            }
+        ];
+
+        const selectedQuestions = questionPool.sort(() => 0.5 - Math.random()).slice(0, 10);
+
+        const quizDiv = document.getElementById('quiz');
+        selectedQuestions.forEach((q, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.classList.add('question');
+            questionDiv.innerHTML = `
+                <h2>${index + 1}. ${q.question}</h2>
+                <ul class="options">
+                    ${q.options.map(option => `
+                        <li>
+                            <label>
+                                <input type="radio" name="q${index}" value="${option}">
+                                ${option}
+                            </label>
+                        </li>
+                    `).join('')}
+                </ul>
+            `;
+            quizDiv.appendChild(questionDiv);
+        });
+
+        function sonuc() {
+            let score = 0;
+            selectedQuestions.forEach((q, index) => {
+                const userAnswer = document.querySelector(`input[name="q${index}"]:checked`);
+                if (userAnswer && userAnswer.value === q.correct) {
+                    score++;
+                }
+            });
+            document.getElementById('result').innerText = `Doğru Cevap Sayısı: ${score} / ${selectedQuestions.length}`;
+        }
+
+        const notification = document.getElementById('notification');
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 500); 
+        setTimeout(() => {
+            notification.classList.remove('show');
+        }, 5500); 
+    </script>
+</body>
+</html>

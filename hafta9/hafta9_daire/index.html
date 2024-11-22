@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10x10 Renkli Daireler</title>
+</head>
+<body>
+    <canvas id="circleGrid" width="500" height="500" style="border:1px solid black;"></canvas>
+
+    <script>
+        const canvas = document.getElementById('circleGrid');
+        const ctx = canvas.getContext('2d');
+
+        const gridboy = 10;
+        const circleRadius = 17;
+        const padding = 10;
+        const startX = 50;
+        const startY = 50; 
+
+        function getGradientColor(row, col) {
+            const red = Math.round((255 / gridboy) * col); 
+            const green = Math.round((255 / gridboy) * row); 
+            const blue = 255 - Math.round((255 / gridboy) * row); 
+            return `rgb(${red}, ${green}, ${blue})`;
+        }
+
+        for (let row = 0; row < gridboy; row++) {
+            for (let col = 0; col < gridboy; col++) {
+                const x = startX + col * (circleRadius * 2 + padding);
+                const y = startY + row * (circleRadius * 2 + padding);
+                const color = getGradientColor(row, col);
+
+                ctx.beginPath();
+                ctx.arc(x, y, circleRadius, 0, Math.PI * 2);
+                ctx.fillStyle = color; 
+                ctx.fill();
+
+                ctx.strokeStyle = "rgba(0, 0, 0, 0.2)";
+                ctx.stroke();
+            }
+        }
+    </script>
+</body>
+</html>
