@@ -1,0 +1,259 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: sans-serif;
+  background-color: #f4f6f8;
+  color: #333;
+}
+
+.container {
+  display: flex;
+}
+
+.sidebar {
+  width: 220px;
+  background-color: #002b5c;
+  color: white;
+  padding: 20px;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  transition: width 0.3s ease;
+  overflow: hidden;
+}
+
+.sidebar.collapsed {
+  width: 60px;
+}
+
+.sidebar h2 {
+  font-size: 18px;
+  margin-bottom: 15px;
+  transition: opacity 0.3s;
+}
+
+.sidebar.collapsed h2 {
+  opacity: 0;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.sidebar ul li {
+  margin-bottom: 10px;
+}
+
+.sidebar ul li a {
+  color: white;
+  text-decoration: none;
+  display: block;
+  padding: 5px 0;
+  white-space: nowrap;
+}
+
+.sidebar.collapsed ul li a {
+  font-size: 0;
+}
+
+.toggle-btn {
+  background-color: transparent;
+  border: none;
+  color: white;
+  font-size: 24px;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.main-content {
+  margin-left: 220px;
+  padding: 20px;
+  flex-grow: 1;
+  transition: margin-left 0.3s ease;
+}
+
+.sidebar.collapsed~.main-content {
+  margin-left: 60px;
+}
+
+header {
+  background-color: #0073e6;
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.unit {
+  background-color: white;
+  margin-top: 30px;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.resources iframe {
+  width: 100%;
+  max-width: 640px;
+  height: 360px;
+  margin-top: 10px;
+  border-radius: 8px;
+}
+
+#discussion-comments-unit1 {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.comment {
+  background-color: #e0f7fa;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.comment p {
+  margin: 0;
+  padding-right: 10px;
+}
+
+.submit-btn,
+.delete-btn {
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.submit-btn:hover,
+.delete-btn:hover {
+  background-color: #0056b3;
+}
+
+.delete-btn {
+  background-color: #FF5733;
+}
+
+.delete-btn:hover {
+  background-color: #c0392b;
+}
+
+#discussion-form-unit1 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+  resize: none;
+  outline: none;
+}
+
+textarea:focus {
+  border-color: #007BFF;
+}
+
+.submit-btn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s, transform 0.2s ease-in-out;
+  align-self: flex-end;
+  /* Buton sağa yaslanacak */
+}
+
+.submit-btn:hover {
+  background-color: #218838;
+  transform: scale(1.05);
+  /* Hover efekti: biraz büyüsün */
+}
+
+.submit-btn:active {
+  background-color: #1e7e34;
+  transform: scale(0.95);
+  /* Tıklanırken biraz küçülsün */
+}
+
+.submit-btn:focus {
+  outline: none;
+}
+
+/* Chatbot ve Mesajlaşma İkonu Konumlandırma */
+.chat-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  /* Diğer içeriklerin üstünde */
+  display: flex;
+  gap: 15px;
+  /* İki ikon arasındaki boşluk */
+}
+
+/* Chatbot İkonu Konumlandırma */
+.chatbot-icon {
+  position: fixed;
+  bottom: 20px;
+  right: 80px;
+  /* İkonu biraz sola kaydırdık */
+  z-index: 1000;
+  /* Diğer içeriklerin üstünde */
+  background-color: #007BFF;
+  color: white;
+  font-size: 24px;
+  padding: 15px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.tabs {
+  margin-bottom: 10px;
+}
+
+.tab-button {
+  padding: 10px 20px;
+  background-color: #e2e2e2;
+  border: none;
+  margin-right: 5px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.tab-button.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.tab-content {
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+}
+
