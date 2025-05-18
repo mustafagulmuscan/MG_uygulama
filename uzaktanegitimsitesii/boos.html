@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Boos Dövüşleri</title>
+  <style>
+    body {
+      background-color: #a8d0e6;
+      /* Açık mavi, gökyüzü gibi */
+      background-image: url('harita.png');
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: 60% auto;
+      background-attachment: fixed;
+      margin: 0;
+      padding: 20px;
+      font-family: 'Comic Sans MS', sans-serif;
+      text-align: center;
+    }
+
+    h1 {
+      color: #d84315;
+    }
+
+    .boss-container {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 40px;
+      flex-wrap: wrap;
+    }
+
+    .boss {
+      cursor: pointer;
+      border: 3px solid #ff7043;
+      border-radius: 10px;
+      padding: 10px;
+      background-color: rgba(255, 255, 255, 0.8);
+      transition: transform 0.2s;
+      width: 180px;
+    }
+
+    .boss:hover {
+      transform: scale(1.05);
+    }
+
+    .boss img {
+      width: 150px;
+      height: 150px;
+    }
+
+    .boss-title {
+      margin-top: 10px;
+      font-weight: bold;
+      color: #bf360c;
+    }
+
+    .defeat-button {
+      margin-top: 10px;
+      padding: 8px 12px;
+      font-weight: bold;
+      background-color: #ff5722;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .defeat-button:hover {
+      background-color: #e64a19;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Boos Dövüşleri</h1>
+  <p>Bir Boos seç ve dövüşe başla!</p>
+
+  <div class="boss-container">
+    <div class="boss" onclick="goToBoss(1)">
+      <img src="1.boos.jpg" alt="Boos 1">
+      <div class="boss-title">Boos 1</div>
+      <button class="defeat-button" onclick="event.stopPropagation(); tryDefeatBoss();">Boosu Yen!</button>
+    </div>
+
+    <div class="boss" onclick="goToBoss(2)">
+      <img src="2.boos.jpg" alt="Boos 2">
+      <div class="boss-title">Boos 2</div>
+    </div>
+
+    <div class="boss" onclick="goToBoss(3)">
+      <img src="3.boos.jpg" alt="Boos 3">
+      <div class="boss-title">Boos 3</div>
+    </div>
+  </div>
+
+  <script>
+    function goToBoss(bossNumber) {
+      const defeated = JSON.parse(localStorage.getItem("defeatedBosses") || "[]");
+
+      if (bossNumber === 1 || defeated.includes(bossNumber - 1)) {
+        window.location.href = `boos${bossNumber}.html`;
+      } else {
+        alert("Önceki Boos'u yenmeden geçemezsin!");
+      }
+    }
+
+    function tryDefeatBoss() {
+      const hasPikachu = localStorage.getItem("Pikachu") === "true";
+      const hasCharmander = localStorage.getItem("Charmander") === "true";
+
+      if (hasPikachu && hasCharmander) {
+        alert("🔥 Tebrikler! Boosu yendin!");
+        const defeated = JSON.parse(localStorage.getItem("defeatedBosses") || "[]");
+        if (!defeated.includes(1)) {
+          defeated.push(1);
+          localStorage.setItem("defeatedBosses", JSON.stringify(defeated));
+        }
+      } else {
+        alert("❌ Boosu yenmek için Pikachu ve Charmander gerekli!");
+      }
+    }
+  </script>
+</body>
+
+</html>
