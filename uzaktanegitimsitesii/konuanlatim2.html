@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Devre Türleri</title>
+    <style>
+        body {
+            font-family: "Comic Sans MS", cursive, sans-serif;
+            max-width: 700px;
+            margin: 20px auto;
+            padding: 15px;
+            background: #fff8dc;
+            color: #333;
+        }
+
+        h1,
+        h2 {
+            color: #b35900;
+            text-align: center;
+        }
+
+        p {
+            font-size: 1.1em;
+            line-height: 1.5;
+        }
+
+        ul {
+            margin-left: 20px;
+        }
+
+        .devre-tipi {
+            border: 1px solid #d9a441;
+            background: #fff2cc;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 20px 0;
+        }
+
+        img {
+            max-width: 100%;
+            border-radius: 6px;
+            margin: 10px 0;
+            display: block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 2px solid #d2b48c;
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f4e1d2;
+            color: #4b2e0f;
+        }
+
+        tr:nth-child(even) {
+            background-color: #fff5e6;
+        }
+
+        tr:hover {
+            background-color: #ffe0b3;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Devre Türleri</h1>
+
+    <h2>1. Seri Devre</h2>
+    <p>Seri devrede, elektrik akımı tek bir yoldan geçer. Tüm devre elemanları birbirine ardışık bağlıdır. Eğer
+        devredeki bir eleman koparsa, akım durur ve tüm devre çalışmaz.<br>
+        • Ampuller aynı hat üzerine, art arda bağlanı. <br>
+        • Akım, tüm ampullerden sırayla geçer.<br>
+        • Devredeki her bileşen birbirine bağımlıdır.<br>
+        • Bir ampul patlar veya çalışmazsa hiçbir ampul yanmaz
+    </p>
+    <div class="devre-tipi">
+        <img src="seridevre.jfif" alt="Seri Devre Görseli" />
+    </div>
+
+    <h2>2. Paralel Devre</h2>
+    <p>Paralel devrede, elektrik akımı birden fazla yoldan geçer. Devre elemanları farklı kollara bağlıdır. Bir eleman
+        çalışmasa bile diğerleri çalışmaya devam eder.<br>
+        • Ampuller, farklı kollara ayrılarak bağlanır.<br>
+        • Her ampul, pile doğrudan bağlıdır.<br>
+        • Bir ampul patlarsa diğerleri çalışmaya devam eder.<br>
+        • Devre bağımsız kollardan oluşur.
+    </p>
+    <div class="devre-tipi">
+        <img src="paraleldevre.png" alt="Paralel Devre Görseli" />
+    </div>
+    <p>
+    <h2>Seri Bağlantıda Parlaklık</h2><br>
+    • Tüm ampuller aynı akımı paylaşır.<br>
+    • Enerji paylaşıldığı için ampuller daha sönük yanar.<br>
+    • Ampul sayısı arttıkça parlaklık daha da azalır.<br>
+    • Eğer devredeki ampuller farklıysa, düşük dirençli olan daha parlak yanar.<br>
+    <h2>Paralel Bağlantıda Parlaklık:</h2><br>
+    • Her ampul doğrudan pile bağlıdır.<br>
+    • Akım bölünür ama her kolda ayrı enerji olduğu için ampuller tam parlak yanar.<br>
+    • Ampul sayısı artsa da parlaklık değişmez.<br>
+    • Bu yüzden evlerdeki devreler genellikle paralel bağlanır.<br><br>
+    </p>
+    <h1>Seri ve Paralel Devre Karşılaştırması</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Özellik</th>
+                <th>Seri Devre</th>
+                <th>Paralel Devre</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Bağlantı Şekli</td>
+                <td>Aynı hat üzerinde sıralı</td>
+                <td>Kollar şeklinde yan yana</td>
+            </tr>
+            <tr>
+                <td>Parlaklık</td>
+                <td>Daha az (sönük)</td>
+                <td>Daha fazla (parlak)</td>
+            </tr>
+            <tr>
+                <td>Bir ampul bozulursa</td>
+                <td>Tüm sistem çalışmaz</td>
+                <td>Diğer ampuller çalışmaya devam eder</td>
+            </tr>
+            <tr>
+                <td>Akım</td>
+                <td>Her ampulden aynı geçer</td>
+                <td>Her kola ayrı geçer</td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+
+</html>
