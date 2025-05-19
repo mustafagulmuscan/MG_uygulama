@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Boos 3 Dövüşü</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', sans-serif;
+            background-color: #f3e5f5;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .question {
+            background-color: #fce4ec;
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 700px;
+            border-radius: 12px;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            padding: 8px 16px;
+            margin-top: 10px;
+            background-color: #ab47bc;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #8e24aa;
+        }
+
+        #drag-area div {
+            margin: 5px;
+            padding: 8px;
+            background-color: #d1c4e9;
+            border: 1px dashed #7e57c2;
+            display: inline-block;
+            border-radius: 6px;
+            cursor: grab;
+        }
+
+        .drop-zone {
+            margin-top: 10px;
+            padding: 15px;
+            border: 2px dashed #7e57c2;
+            min-height: 50px;
+            border-radius: 10px;
+            background-color: #ede7f6;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>⚡ Boos 3 Dövüşü</h1>
+
+    <!-- ÇOKTAN SEÇMELİ -->
+    <div class="question">
+        <h3>1. Elektrik akımı nedir?</h3>
+        <button onclick="answerMCQ(this, false)">A) Pilin içindeki sıvının hareketidir.</button><br>
+        <button onclick="answerMCQ(this, true)">B) Elektronların devre üzerindeki yönlü hareketidir.</button><br>
+        <button onclick="answerMCQ(this, false)">C) Ampulün ışık yaymasıdır.</button><br>
+        <button onclick="answerMCQ(this, false)">D) Telin ısınarak çalışmasıdır.</button>
+    </div>
+
+    <div class="question">
+        <h3>2. Elektrik akımının oluşabilmesi için aşağıdakilerden hangisi gereklidir?</h3>
+        <button onclick="answerMCQ(this, false)">A) Devrenin açık olması</button><br>
+        <button onclick="answerMCQ(this, true)">B) Elektrik kaynağı ve kapalı devre</button><br>
+        <button onclick="answerMCQ(this, false)">C) Sadece ampul olması</button><br>
+        <button onclick="answerMCQ(this, false)">D) Telin yalıtkan olması</button>
+    </div>
+
+    <div class="question">
+        <h3>3. Aşağıdakilerden hangisi elektrik akımının yönü hakkında doğrudur?</h3>
+        <button onclick="answerMCQ(this, true)">A) Elektrik akımı artı kutuptan eksi kutba doğru ilerler.</button><br>
+        <button onclick="answerMCQ(this, false)">B) Akım sadece elektrikli süpürgelerde oluşur.</button><br>
+        <button onclick="answerMCQ(this, false)">C) Akım, yalnızca bir kez akar ve durur.</button><br>
+        <button onclick="answerMCQ(this, false)">D) Elektrik akımı eksi kutuptan artıya akar.</button>
+    </div>
+
+    <!-- DOĞRU/YANLIŞ -->
+    <div class="question">
+        <h3>4. Doğru / Yanlış</h3>
+        <p>1. Elektrik akımı, elektrik yüklerinin hareketidir.</p>
+        <button onclick="answerTF(this, true)">Doğru</button> <button
+            onclick="answerTF(this, false)">Yanlış</button><br><br>
+
+        <p>2. Devre açıkken elektrik akımı oluşur.</p>
+        <button onclick="answerTF(this, false)">Doğru</button> <button
+            onclick="answerTF(this, true)">Yanlış</button><br><br>
+
+        <p>3. Akım yönü genellikle artıdan eksiye kabul edilir.</p>
+        <button onclick="answerTF(this, true)">Doğru</button> <button onclick="answerTF(this, false)">Yanlış</button>
+    </div>
+
+    <!-- EŞLEŞTİRME 1 -->
+    <div class="question">
+        <h3>5. Kavramları tanımlarıyla eşleştir</h3>
+        <div id="drag-area">
+            <div id="akim" draggable="true" ondragstart="drag(event)">Elektrik Akımı</div>
+            <div id="devre" draggable="true" ondragstart="drag(event)">Kapalı Devre</div>
+            <div id="pil" draggable="true" ondragstart="drag(event)">Pil</div>
+        </div>
+
+        <div style="display:flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+            <div class="drop-zone" data-answer="akim">Yüklerin devrede yönlü
+                hareketi<br><br><span></span></div>
+            <div class="drop-zone" data-answer="devre">Akımın geçebildiği tamamlanmış
+                yol<br><br><span></span></div>
+            <div class="drop-zone" data-answer="pil">Elektrik enerjisi kaynağı<br><br><span></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- EŞLEŞTİRME 2 -->
+    <div class="question">
+        <h3>6. Kavramları açıklamalarıyla eşleştir</h3>
+        <div id="drag-area">
+            <div id="akim2" draggable="true" ondragstart="drag(event)">Elektrik Akımı</div>
+            <div id="devre2" draggable="true" ondragstart="drag(event)">Kapalı Devre</div>
+            <div id="pil2" draggable="true" ondragstart="drag(event)">Pil</div>
+        </div>
+
+        <div style="display:flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+            <div class="drop-zone" data-answer="akim2">Yüklerin hareketi<br><br><span></span></div>
+            <div class="drop-zone" data-answer="devre2">Akımın geçebileceği yol<br><br><span></span>
+            </div>
+            <div class="drop-zone" data-answer="pil2">Enerji kaynağı<br><br><span></span></div>
+        </div>
+    </div>
+
+    <!-- BOOS YEN -->
+    <div class="question">
+        <h2>⚡ Boosu Yen!</h2>
+        <p>Raichu ve Elekid aldıysan, boosu yenebilirsin.</p>
+        <button onclick="tryDefeatBoss()">Boosu Yen</button>
+    </div>
+
+    <script>
+        let coin = parseInt(localStorage.getItem("coin")) || 0;
+        let earned = JSON.parse(localStorage.getItem("boos3Earned") || "[]");
+
+        function rewardOnce(key, amount = 10) {
+            if (!earned.includes(key)) {
+                coin += amount;
+                earned.push(key);
+                localStorage.setItem("coin", coin);
+                localStorage.setItem("boos3Earned", JSON.stringify(earned));
+                alert(`🎉 ${amount} coin kazandın!`);
+            }
+        }
+
+        function answerMCQ(btn, correct) {
+            const key = "mcq-" + btn.innerText;
+            if (correct) {
+                rewardOnce(key);
+                btn.style.backgroundColor = "green";
+            } else {
+                alert("❌ Yanlış cevap.");
+                btn.style.backgroundColor = "red";
+            }
+        }
+
+        function answerTF(btn, correct) {
+            const key = "tf-" + btn.previousElementSibling?.innerText || btn.innerText;
+            if (correct) {
+                rewardOnce(key);
+                btn.style.backgroundColor = "green";
+            } else {
+                alert("❌ Yanlış cevap.");
+                btn.style.backgroundColor = "red";
+            }
+        }
+
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function drag(ev) {
+            ev.dataTransfer.setData("text", ev.target.id);
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            const draggedId = ev.dataTransfer.getData("text");
+            const dropZone = ev.currentTarget;
+            const expected = dropZone.getAttribute("data-answer");
+
+            if (draggedId === expected) {
+                dropZone.appendChild(document.getElementById(draggedId));
+                dropZone.querySelector("span").innerText = "✅ Doğru!";
+                rewardOnce("match-" + expected);
+            } else {
+                alert("❌ Yanlış eşleşme!");
+            }
+        }
+
+        function tryDefeatBoss() {
+            const hasRaichu = localStorage.getItem("Raichu") === "true";
+            const hasElekid = localStorage.getItem("Elekid") === "true";
+
+            if (hasRaichu && hasElekid) {
+                alert("⚡ Tebrikler! Boos 3'ü de yendin!");
+                const defeated = JSON.parse(localStorage.getItem("defeatedBosses") || "[]");
+                if (!defeated.includes(3)) {
+                    defeated.push(3);
+                    localStorage.setItem("defeatedBosses", JSON.stringify(defeated));
+                }
+            } else {
+                alert("❌ Raichu ve Elekid olmadan boosu yenemezsin!");
+            }
+        }
+    </script>
+</body>
+
+</html>
