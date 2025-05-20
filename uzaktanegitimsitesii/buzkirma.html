@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Buz Kırma Etkinliği</title>
+    <link rel="stylesheet" href="buzkirma.css">
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #fef8e7;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #fffdf6;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 3px solid #ffe08a;
+        }
+
+        h2 {
+            color: #ff6f00;
+            text-align: center;
+            font-size: 26px;
+        }
+
+        .question {
+            margin-bottom: 25px;
+        }
+
+        .question p {
+            margin: 0 0 8px;
+            font-weight: bold;
+            color: #5d4037;
+            font-size: 18px;
+        }
+
+        .question input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ffe082;
+            border-radius: 10px;
+            font-size: 16px;
+            background-color: #fff8e1;
+            box-shadow: inset 1px 1px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background-color: #ffb74d;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: #ff9800;
+        }
+
+        #completed-message {
+            text-align: center;
+            color: #2e7d32;
+            font-weight: bold;
+            padding: 25px;
+            border: 3px dashed #a5d6a7;
+            background-color: #e8f5e9;
+            border-radius: 16px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2 id="welcome-message"></h2>
+
+        <div id="activity-area">
+            <div class="question">
+                <p>Soru 1: En sevdiğin ders?</p>
+                <input type="text" id="q1">
+            </div>
+
+            <div class="question">
+                <p>Soru 2: Tatilde en çok ne yapmayı seversin?</p>
+                <input type="text" id="q2">
+            </div>
+
+            <div class="question">
+                <p>Soru 3: Eğer bir süper gücün olsa ne olurdu?</p>
+                <input type="text" id="q3">
+            </div>
+
+            <button onclick="submitAnswers()" class="submit-btn">Etkinliği Bitir</button>
+        </div>
+
+        <div id="completed-message" style="display: none;">
+            <h3>Etkinliği tamamladınız. Teşekkürler 🎉</h3>
+        </div>
+    </div>
+
+    <script>
+        const username = localStorage.getItem("username") || "Öğrenci";
+        document.getElementById("welcome-message").innerText = `Hoş geldin, ${username}!`;
+
+        function submitAnswers() {
+            const q1 = document.getElementById("q1").value.trim();
+            const q2 = document.getElementById("q2").value.trim();
+            const q3 = document.getElementById("q3").value.trim();
+
+            if (q1 && q2 && q3) {
+                localStorage.setItem("buz_kirma_tamam", "true");
+                // Bu satır direkt ogrenci.html sayfasına yönlendirir
+                window.location.href = "ogrenci.html";
+            } else {
+                alert("Lütfen tüm soruları cevaplayın.");
+            }
+        }
+    </script>
+
+</body>
+
+</html>
