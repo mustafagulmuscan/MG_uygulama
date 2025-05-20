@@ -45,10 +45,10 @@
       transform: scale(1.05);
     }
 
-    .boss img {
+    /* .boss img {
       width: 150px;
       height: 150px;
-    }
+    } */
 
     .boss-title {
       margin-top: 10px;
@@ -79,19 +79,23 @@
 
   <div class="boss-container">
     <div class="boss" onclick="goToBoss(1)">
-      <img src="1.boos.jpg" alt="Boos 1">
+      <img src="jessie.jpg" alt="Boos 1" style="max-width: 60%;">
       <div class="boss-title">Boos 1</div>
-      <button class="defeat-button" onclick="event.stopPropagation(); tryDefeatBoss();">Boosu Yen!</button>
+      <button class="defeat-button" onclick="event.stopPropagation(); tryDefeatBoss(1);">Boosu Yen!</button>
     </div>
 
     <div class="boss" onclick="goToBoss(2)">
-      <img src="2.boos.jpg" alt="Boos 2">
+      <img src="erkek.jpg" alt="Boos 2" style="max-width: 60%;">
       <div class="boss-title">Boos 2</div>
+      <button class="defeat-button" onclick="event.stopPropagation(); tryDefeatBoss(2);">Boosu Yen!</button>
+
     </div>
 
     <div class="boss" onclick="goToBoss(3)">
-      <img src="3.boos.jpg" alt="Boos 3">
+      <img src="üçlü.jpg" alt="Boos 3" style="width: 150px; height: 150px;">
       <div class="boss-title">Boos 3</div>
+
+      <button class="defeat-button" onclick="event.stopPropagation(); tryDefeatBoss(3);">Boosu Yen!</button>
     </div>
   </div>
 
