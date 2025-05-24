@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PokéLearn - Elektrik Kavramları</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Press+Start+2P&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="%23FF0000" stroke="%23ffffff" stroke-width="2" opacity="0.05"/></svg>');
+            background-size: 100px;
+        }
+
+        .retro-font {
+            font-family: 'Press Start 2P', cursive;
+        }
+
+        .pokeball-bg {
+            background: radial-gradient(circle at center, #FF0000 0%, #FF0000 45%, #ffffff 45%, #ffffff 50%, #000000 50%, #000000 55%, #ffffff 55%, #ffffff 100%);
+        }
+
+        .type-electric {
+            background-color: #F8D030;
+            color: #000;
+        }
+
+        .type-water {
+            background-color: #6890F0;
+        }
+
+        .type-ground {
+            background-color: #E0C068;
+        }
+
+        .type-steel {
+            background-color: #B8B8D0;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .video-module {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .progress-bar {
+            height: 5px;
+            background: linear-gradient(90deg, #FF0000, #FFCC00);
+        }
+
+        .module-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 0, 0, 0.2);
+        }
+
+        .activity-tab {
+            transition: all 0.3s ease;
+        }
+
+        .activity-tab.active {
+            background-color: #F8D030;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .drag-drop-area {
+            min-height: 150px;
+            border: 2px dashed #F8D030;
+            background-color: rgba(248, 208, 48, 0.1);
+        }
+
+        .drag-item {
+            cursor: grab;
+            transition: transform 0.2s;
+        }
+
+        .drag-item:active {
+            cursor: grabbing;
+            transform: scale(1.05);
+        }
+
+        .quiz-option {
+            transition: all 0.2s;
+        }
+
+        .quiz-option:hover {
+            background-color: rgba(248, 208, 48, 0.3);
+        }
+
+        .quiz-option.correct {
+            background-color: #78C850;
+            color: white;
+        }
+
+        .quiz-option.incorrect {
+            background-color: #F85888;
+            color: white;
+        }
+
+        .connection-type {
+            border: 2px solid #F8D030;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .connection-type:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(248, 208, 48, 0.3);
+        }
+
+        .connection-type.active {
+            background-color: rgba(248, 208, 48, 0.2);
+            border-color: #FF0000;
+        }
+
+        .pokemon-badge {
+            display: inline-flex;
+            align-items: center;
+            background-color: rgba(248, 208, 48, 0.2);
+            border-radius: 20px;
+            padding: 4px 8px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        .pokemon-badge img {
+            width: 24px;
+            height: 24px;
+            margin-right: 6px;
+        }
+
+        .circuit-element {
+            width: 80px;
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            background-color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .circuit-element:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .circuit-element i {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .circuit-board {
+            background-color: #f0f0f0;
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            min-height: 300px;
+        }
+
+        .wire {
+            position: absolute;
+            background-color: #FFD700;
+            z-index: 1;
+        }
+
+        .connection-point {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: #FF0000;
+            position: absolute;
+            z-index: 2;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Hero Section -->
+        <section
+            class="bg-gradient-to-r from-red-600 to-yellow-500 rounded-xl p-8 mb-12 text-white relative overflow-hidden">
+            <div class="absolute inset-0 opacity-10">
+                <div class="absolute top-0 left-0 w-32 h-32 rounded-full bg-white opacity-20"></div>
+                <div class="absolute bottom-0 right-0 w-48 h-48 rounded-full bg-white opacity-20"></div>
+            </div>
+            <div class="relative z-10 flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-6 md:mb-0">
+                    <h2 class="retro-font text-3xl md:text-4xl mb-4">Elektrik Kavramları ve Pokémon!</h2>
+                    <p class="text-lg mb-6">Pikachu ve arkadaşlarıyla elektrik kavramlarını öğren!</p>
+                    
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <div class="relative w-64 h-64">
+                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png"
+                            alt="Pikachu" class="w-full h-full object-contain floating" style="animation-delay: 0.2s;">
+                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/100.png"
+                            alt="Voltorb" class="absolute -bottom-4 -left-4 w-20 h-20 object-contain floating"
+                            style="animation-delay: 0.4s;">
+                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/135.png"
+                            alt="Jolteon" class="absolute top-4 -right-4 w-20 h-20 object-contain floating"
+                            style="animation-delay: 0.6s;">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Video Module Section -->
+        <section class="mb-12">
+            <h2 class="retro-font text-2xl mb-6 text-gray-800 flex items-center">
+                <i class="fas fa-bolt mr-3 text-yellow-500"></i> Temel Elektrik Kavramları
+            </h2>
+
+            <div class="video-module p-4 mb-6">
+                <div class="aspect-w-16 aspect-h-9 bg-black rounded-lg overflow-hidden">
+                    <iframe src="https://furkan.h5p.com/content/1292595305401315137/embed"
+                        aria-label="ElektrikKavramları" width="1088" height="637" frameborder="0"
+                        allowfullscreen="allowfullscreen"
+                        allow="autoplay *; geolocation *; microphone *; camera *; midi *; encrypted-media *"></iframe>
+                    <script src="https://furkan.h5p.com/js/h5p-resizer.js" charset="UTF-8"></script>
+                </div>
+
+            </div>
+
+            <!-- Activity Tabs -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
+                <div class="flex border-b">
+                    <button class="activity-tab active flex-1 py-3 px-4 text-center" onclick="openActivityTab('notes')">
+                        <i class="fas fa-sticky-note mr-2"></i> Ders Notları
+                    </button>
+                    <button class="activity-tab flex-1 py-3 px-4 text-center" onclick="openActivityTab('quiz')">
+                        <i class="fas fa-question-circle mr-2"></i> Test
+                    </button>
+                    <button class="activity-tab flex-1 py-3 px-4 text-center" onclick="openActivityTab('dragdrop')">
+                        <i class="fas fa-arrows-alt mr-2"></i> Sürükle-Bırak
+                    </button>
+                    <button class="activity-tab flex-1 py-3 px-4 text-center" onclick="openActivityTab('circuit')">
+                        <i class="fas fa-project-diagram mr-2"></i> Devre Kur
+                    </button>
+                </div>
+
+                <!-- Notes Tab -->
+                <div id="notes-tab" class="activity-content p-6">
+                    <h3 class="text-xl font-bold mb-4 text-gray-800">Ders Notları: Elektrik Kavramları</h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <!-- Voltage Concept -->
+                        <div class="bg-gray-100 p-4 rounded-lg">
+                            <h4 class="font-bold text-yellow-600 mb-3 flex items-center">
+                                <i class="fas fa-bolt mr-2"></i> Voltaj (Gerilim)
+                            </h4>
+                            <p class="text-gray-700 mb-4">
+                                Voltaj, elektrik yüklerini hareket ettiren itici güçtür. Pikachu'nun vücudundaki
+                                elektrik potansiyeli voltajı temsil eder.
+                            </p>
+                            <div class="flex items-center">
+                                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png"
+                                    alt="Pikachu" class="w-12 h-12 mr-3">
+                                <div>
+                                    <p class="text-sm text-gray-700">
+                                        <span class="font-bold">Formül:</span> V = I × R <br>
+                                        <span class="font-bold">Birim:</span> Volt (V)
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Current Concept -->
+                        <div class="bg-gray-100 p-4 rounded-lg">
+                            <h4 class="font-bold text-blue-600 mb-3 flex items-center">
+                                <i class="fas fa-bolt mr-2"></i> Akım
+                            </h4>
+                            <p class="text-gray-700 mb-4">
+                                Akım, elektrik yüklerinin bir iletken içindeki hareketidir. Magnemite'ın manyetik
+                                alanında ölçtüğü şey akımdır.
+                            </p>
+                            <div class="flex items-center">
+                                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/81.png"
+                                    alt="Magnemite" class="w-12 h-12 mr-3">
+                                <div>
+                                    <p class="text-sm text-gray-700">
+                                        <span class="font-bold">Formül:</span> I = V / R <br>
+                                        <span class="font-bold">Birim:</span> Amper (A)
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Resistance Concept -->
+                        <div class="bg-gray-100 p-4 rounded-lg">
+                            <h4 class="font-bold text-red-600 mb-3 flex items-center">
+                                <i class="fas fa-shield-alt mr-2"></i> Direnç
+                            </h4>
+                            <p class="text-gray-700 mb-4">
+                                Direnç, elektrik akımına karşı gösterilen zorluktur. Onix gibi kaya Pokémon'ları yüksek
+                                direnç gösterirler.
+                            </p>
+                            <div class="flex items-center">
+                                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/95.png"
+                                    alt="Onix" class="w-12 h-12 mr-3">
+                                <div>
+                                    <p class="text-sm text-gray-700">
+                                        <span class="font-bold">Formül:</span> R = V / I <br>
+                                        <span class="font-bold">Birim:</span> Ohm (Ω)
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Power Concept -->
+                        <div class="bg-gray-100 p-4 rounded-lg">
+                            <h4 class="font-bold text-purple-600 mb-3 flex items-center">
+                                <i class="fas fa-fire mr-2"></i> Güç
+                            </h4>
+                            <p class="text-gray-700 mb-4">
+                                Elektrik gücü, birim zamanda harcanan enerjidir. Electabuzz'ın Thunder Punch saldırısı
+                                yüksek güç gerektirir.
+                            </p>
+                            <div class="flex items-center">
+                                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/125.png"
+                                    alt="Electabuzz" class="w-12 h-12 mr-3">
+                                <div>
+                                    <p class="text-sm text-gray-700">
+                                        <span class="font-bold">Formül:</span> P = V × I <br>
+                                        <span class="font-bold">Birim:</span> Watt (W)
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ohm's Law -->
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                        <h4 class="font-bold text-blue-800 mb-2 flex items-center">
+                            <i class="fas fa-calculator text-blue-600 mr-2"></i> Ohm Kanunu
+                        </h4>
+                        <p class="text-gray-700 mb-3">
+                            Voltaj, akım ve direnç arasındaki ilişkiyi açıklar. Magneton'un üç başı bu ilişkiyi mükemmel
+                            şekilde temsil eder!
+                        </p>
+                        <div class="flex flex-col md:flex-row items-center justify-center">
+                            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/82.png"
+                                alt="Magneton" class="w-24 h-24 mb-4 md:mb-0 md:mr-6">
+                            <div class="text-center md:text-left">
+                                <div class="text-2xl font-bold mb-2">V = I × R</div>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <div class="bg-white p-2 rounded-lg">
+                                        <div class="font-bold">V</div>
+                                        <div class="text-sm">Voltaj (Volt)</div>
+                                    </div>
+                                    <div class="bg-white p-2 rounded-lg">
+                                        <div class="font-bold">I</div>
+                                        <div class="text-sm">Akım (Amper)</div>
+                                    </div>
+                                    <div class="bg-white p-2 rounded-lg">
+                                        <div class="font-bold">R</div>
+                                        <div class="text-sm">Direnç (Ohm)</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Circuit Types -->
+                    <div class="mb-6">
+                        <h4 class="font-bold text-gray-800 mb-3">Devre Türleri</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Series Circuit -->
+                            <div class="bg-gray-100 p-4 rounded-lg">
+                                <h5 class="font-bold text-green-600 mb-2 flex items-center">
+                                    <i class="fas fa-link mr-2"></i> Seri Devre
+                                </h5>
+                                <p class="text-gray-700 mb-3">
+                                    Bileşenlerin tek bir yol üzerinde bağlandığı devredir. Voltorb'ların seri bağlanması
+                                    gibi!
+                                </p>
+                                <div class="flex items-center">
+                                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/100.png"
+                                        alt="Voltorb" class="w-10 h-10 mr-2">
+                                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/100.png"
+                                        alt="Voltorb" class="w-10 h-10 mr-2">
+                                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/100.png"
+                                        alt="Voltorb" class="w-10 h-10">
+                                </div>
+                                <div class="mt-2 text-sm">
+                                    <span class="font-bold">Özellikler:</span> Akım sabit, voltaj bölünür
+                                </div>
+                            </div>
+
+                            <!-- Parallel Circuit -->
+                            <div class="bg-gray-100 p-4 rounded-lg">
+                                <h5 class="font-bold text-orange-600 mb-2 flex items-center">
+                                    <i class="fas fa-code-branch mr-2"></i> Paralel Devre
+                                </h5>
+                                <p class="text-gray-700 mb-3">
+                                    Bileşenlerin farklı yollara bağlandığı devredir. Pichu'ların paralel bağlanması
+                                    gibi!
+                                </p>
+                                <div class="flex flex-col items-center">
+                                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/172.png"
+                                        alt="Pichu" class="w-10 h-10 mb-1">
+                                    <div class="flex">
+                                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/172.png"
+                                            alt="Pichu" class="w-10 h-10 mx-1">
+                                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/172.png"
+                                            alt="Pichu" class="w-10 h-10 mx-1">
+                                    </div>
+                                </div>
+                                <div class="mt-2 text-sm">
+                                    <span class="font-bold">Özellikler:</span> Voltaj sabit, akım bölünür
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Conductors and Insulators -->
+                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                        <h4 class="font-bold text-yellow-800 mb-2 flex items-center">
+                            <i class="fas fa-traffic-light text-yellow-600 mr-2"></i> İletkenler ve Yalıtkanlar
+                        </h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Conductors -->
+                            <div>
+                                <h5 class="font-bold text-green-600 mb-2">İletkenler</h5>
+                                <p class="text-gray-700 mb-3">
+                                    Elektriği iyi ileten maddelerdir. Elektrik Pokémon'ları mükemmel iletkenlerdir!
+                                </p>
+                                <div class="flex flex-wrap">
+                                    <div class="pokemon-badge">
+                                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png"
+                                            alt="Pikachu">
+                                        <span>Pikachu</span>
+                                    </div>
+                                    <div class="pokemon-badge">
+                                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/82.png"
+                                            alt="Magneton">
+                                        <span>Magneton</span>
+                                    </div>
+                                    <div class="pokemon-badge">
+                                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/135.png"
+                                            alt="Jolteon">
+                                        <span>Jolteon</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Insulators -->
+                            <div>
+                                <h5 class="font-bold text-red-600 mb-2">Yalıtkanlar</h5>
+                                <p class="text-gray-700 mb-3">
+                                    Elektriği iyi iletmeyen maddelerdir. Kaya ve toprak Pokémon'ları iyi yalıtkandır!
+                                </p>
+                                <div class="flex flex-wrap">
+                                    <div class="pokemon-badge">
+                                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/95.png"
+                                            alt="Onix">
+                                        <span>Onix</span>
+                                    </div>
+                                    <div class="pokemon-badge">
+                                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/105.png"
+                                            alt="Marowak">
+                                        <span>Marowak</span>
+                                    </div>
+                                    <div class="pokemon-badge">
+                                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/185.png"
+                                            alt="Sudowoodo">
+                                        <span>Sudowoodo</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quiz Tab -->
+                <div id="quiz-tab" class="activity-content p-6 hidden">
+                    <h3 class="text-xl font-bold mb-4 text-gray-800">Test Etkinliği: Elektrik Kavramları</h3>
+
+                    <div class="mb-6">
+                        <h4 class="font-bold mb-3">1. Ohm Kanunu'na göre aşağıdakilerden hangisi doğrudur?</h4>
+                        <div class="space-y-2">
+                            <div class="quiz-option p-3 border rounded-lg" onclick="checkAnswer(this, true)">
+                                <i class="fas fa-circle mr-2"></i> V = I × R
+                            </div>
+                            <div class="quiz-option p-3 border rounded-lg" onclick="checkAnswer(this, false)">
+                                <i class="fas fa-circle mr-2"></i> I = V × R
+                            </div>
+                            <div class="quiz-option p-3 border rounded-lg" onclick="checkAnswer(this, false)">
+                                <i class="fas fa-circle mr-2"></i> R = V × I
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-6">
+                        <h4 class="font-bold mb-3">2. Hangisi elektrik gücünün birimidir?</h4>
+                        <div class="space-y-2">
+                            <div class="quiz-option p-3 border rounded-lg" onclick="checkAnswer(this, false)">
+                                <i class="fas fa-circle mr-2"></i> Volt
+                            </div>
+                            <div class="quiz-option p-3 border rounded-lg" onclick="checkAnswer(this, false)">
+                                <i class="fas fa-circle mr-2"></i> Amper
+                            </div>
+                            <div class="quiz-option p-3 border rounded-lg" onclick="checkAnswer(this, true)">
+                                <i class="fas fa-circle mr-2"></i> Watt
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-6">
+                        <h4 class="font-bold mb-3">3. Seri devrede hangisi sabittir?</h4>
+                        <div class="space-y-2">
+                            <div class="quiz-option p-3 border rounded-lg" onclick="checkAnswer(this, true)">
+                                <i class="fas fa-circle mr-2"></i> Akım
+                            </div>
+                            <div class="quiz-option p-3 border rounded-lg" onclick="checkAnswer(this, false)">
+                                <i class="fas fa-circle mr-2"></i> Voltaj
+                            </div>
+                            <div class="quiz-option p-3 border rounded-lg" onclick="checkAnswer(this, false)">
+                                <i class="fas fa-circle mr-2"></i> Direnç
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-6">
+                        <h4 class="font-bold mb-3">4. Hangisi iyi bir iletken Pokémon'dur?</h4>
+                        <div class="space-y-2">
+                            <div class="quiz-option p-3 border rounded-lg flex items-center"
+                                onclick="checkAnswer(this, true)">
+                                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/135.png"
+                                    alt="Jolteon" class="w-8 h-8 mr-2">
+                                <span>Jolteon</span>
+                            </div>
+                            <div class="quiz-option p-3 border rounded-lg flex items-center"
+                                onclick="checkAnswer(this, false)">
+                                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/95.png"
+                                    alt="Onix" class="w-8 h-8 mr-2">
+                                <span>Onix</span>
+                            </div>
+                            <div class="quiz-option p-3 border rounded-lg flex items-center"
+                                onclick="checkAnswer(this, false)">
+                                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/185.png"
+                                    alt="Sudowoodo" class="w-8 h-8 mr-2">
+                                <span>Sudowoodo</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-6">
+                        <h4 class="font-bold mb-3">5. Paralel devrede hangisi bölünür?</h4>
+                        <div class="space-y-2">
+                            <div class="quiz-option p-3 border rounded-lg" onclick="checkAnswer(this, true)">
+                                <i class="fas fa-circle mr-2"></i> Akım
+                            </div>
+                            <div class="quiz-option p-3 border rounded-lg" onclick="checkAnswer(this, false)">
+                                <i class="fas fa-circle mr-2"></i> Voltaj
+                            </div>
+                            <div class="quiz-option p-3 border rounded-lg" onclick="checkAnswer(this, false)">
+                                <i class="fas fa-circle mr-2"></i> Direnç
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-2 rounded-lg">
+                        <i class="fas fa-check mr-2"></i> Testi Tamamla
+                    </button>
+                </div>
+
+                <!-- Drag & Drop Tab -->
+                <div id="dragdrop-tab" class="activity-content p-6 hidden">
+                    <h3 class="text-xl font-bold mb-4 text-gray-800">Sürükle-Bırak Etkinliği</h3>
+                    <p class="mb-4">Aşağıdaki elektrik kavramlarını doğru tanımlarıyla eşleştirin!</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Drag Items -->
+                        <div>
+                            <h4 class="font-bold mb-3 text-yellow-600">Kavramlar</h4>
+                            <div class="space-y-3">
+                                <div class="drag-item bg-white p-3 border border-yellow-500 rounded-lg shadow-sm"
+                                    draggable="true" ondragstart="drag(event)" id="drag1">
+                                    Voltaj
+                                </div>
+                                <div class="drag-item bg-white p-3 border border-yellow-500 rounded-lg shadow-sm"
+                                    draggable="true" ondragstart="drag(event)" id="drag2">
+                                    Akım
+                                </div>
+                                <div class="drag-item bg-white p-3 border border-yellow-500 rounded-lg shadow-sm"
+                                    draggable="true" ondragstart="drag(event)" id="drag3">
+                                    Direnç
+                                </div>
+                                <div class="drag-item bg-white p-3 border border-yellow-500 rounded-lg shadow-sm"
+                                    draggable="true" ondragstart="drag(event)" id="drag4">
+                                    Güç
+                                </div>
+                                <div class="drag-item bg-white p-3 border border-yellow-500 rounded-lg shadow-sm"
+                                    draggable="true" ondragstart="drag(event)" id="drag5">
+                                    Ohm Kanunu
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Drop Area -->
+                        <div>
+                            <h4 class="font-bold mb-3 text-blue-600">Tanımlar</h4>
+                            <div class="space-y-3">
+                                <div class="drag-drop-area p-4 rounded-lg mb-3" ondragover="allowDrop(event)"
+                                    ondrop="drop(event)" data-target="drag1">
+                                    Elektrik yüklerini hareket ettiren itici güç (V)
+                                </div>
+                                <div class="drag-drop-area p-4 rounded-lg mb-3" ondragover="allowDrop(event)"
+                                    ondrop="drop(event)" data-target="drag2">
+                                    Elektrik yüklerinin hareketi (A)
+                                </div>
+                                <div class="drag-drop-area p-4 rounded-lg mb-3" ondragover="allowDrop(event)"
+                                    ondrop="drop(event)" data-target="drag3">
+                                    Akıma karşı gösterilen zorluk (Ω)
+                                </div>
+                                <div class="drag-drop-area p-4 rounded-lg mb-3" ondragover="allowDrop(event)"
+                                    ondrop="drop(event)" data-target="drag4">
+                                    Birim zamanda harcanan enerji (W)
+                                </div>
+                                <div class="drag-drop-area p-4 rounded-lg" ondragover="allowDrop(event)"
+                                    ondrop="drop(event)" data-target="drag5">
+                                    V = I × R formülü
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 flex justify-between items-center">
+                        <div id="drag-feedback" class="text-green-600 font-bold hidden">
+                            <i class="fas fa-check-circle mr-2"></i> Doğru eşleştirme!
+                        </div>
+                        <button class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-2 rounded-lg"
+                            onclick="checkDragDrop()">
+                            <i class="fas fa-check mr-2"></i> Kontrol Et
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Circuit Builder Tab -->
+                <div id="circuit-tab" class="activity-content p-6 hidden">
+                    <h3 class="text-xl font-bold mb-4 text-gray-800">Devre Kurma Etkinliği</h3>
+                    <p class="mb-4">Aşağıdaki bileşenleri kullanarak bir elektrik devresi oluşturun!</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                        <!-- Circuit Elements -->
+                        <div>
+                            <h4 class="font-bold mb-3 text-yellow-600">Devre Elemanları</h4>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="circuit-element" draggable="true" ondragstart="dragCircuitElement(event)"
+                                    data-type="battery">
+                                    <i class="fas fa-battery-full text-red-500"></i>
+                                    <span class="text-xs">Pil (9V)</span>
+                                </div>
+                                <div class="circuit-element" draggable="true" ondragstart="dragCircuitElement(event)"
+                                    data-type="resistor">
+                                    <i class="fas fa-resistance text-blue-500"></i>
+                                    <span class="text-xs">Direnç (10Ω)</span>
+                                </div>
+                                <div class="circuit-element" draggable="true" ondragstart="dragCircuitElement(event)"
+                                    data-type="led">
+                                    <i class="fas fa-lightbulb text-yellow-500"></i>
+                                    <span class="text-xs">LED</span>
+                                </div>
+                                <div class="circuit-element" draggable="true" ondragstart="dragCircuitElement(event)"
+                                    data-type="switch">
+                                    <i class="fas fa-toggle-on text-green-500"></i>
+                                    <span class="text-xs">Anahtar</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Circuit Board -->
+                        <div class="md:col-span-2">
+                            <h4 class="font-bold mb-3 text-blue-600">Devre Tahtası</h4>
+                            <div class="circuit-board" id="circuit-board" ondragover="allowDrop(event)"
+                                ondrop="dropCircuitElement(event)">
+                                <div class="text-gray-500 text-center py-20">
+                                    Bileşenleri buraya sürükleyip bırakarak devre oluşturun
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center">
+                        <button class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg"
+                            onclick="clearCircuit()">
+                            <i class="fas fa-trash-alt mr-2"></i> Temizle
+                        </button>
+                        <button class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-2 rounded-lg"
+                            onclick="testCircuit()">
+                            <i class="fas fa-bolt mr-2"></i> Devreyi Test Et
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <script>
+            // Tab functionality
+            function openActivityTab(tabName) {
+                const tabs = document.querySelectorAll('.activity-tab');
+                const contents = document.querySelectorAll('.activity-content');
+
+                tabs.forEach(tab => tab.classList.remove('active'));
+                contents.forEach(content => content.classList.add('hidden'));
+
+                document.querySelector(`.activity-tab[onclick="openActivityTab('${tabName}')"]`).classList.add('active');
+                document.getElementById(`${tabName}-tab`).classList.remove('hidden');
+            }
+
+            // Quiz functionality
+            function checkAnswer(element, isCorrect) {
+                const options = element.parentElement.querySelectorAll('.quiz-option');
+                options.forEach(opt => {
+                    opt.classList.remove('correct', 'incorrect');
+                    opt.querySelector('i')?.classList?.remove('fa-check', 'fa-times');
+                    opt.querySelector('i')?.classList?.add('fa-circle');
+                });
+
+                if (isCorrect) {
+                    element.classList.add('correct');
+                    if (element.querySelector('i')) {
+                        element.querySelector('i').classList.remove('fa-circle');
+                        element.querySelector('i').classList.add('fa-check');
+                    }
+                } else {
+                    element.classList.add('incorrect');
+                    if (element.querySelector('i')) {
+                        element.querySelector('i').classList.remove('fa-circle');
+                        element.querySelector('i').classList.add('fa-times');
+                    }
+
+                    // Find and show correct answer
+                    const correctOption = Array.from(options).find(opt => !opt.classList.contains('incorrect'));
+                    if (correctOption) {
+                        correctOption.classList.add('correct');
+                        if (correctOption.querySelector('i')) {
+                            correctOption.querySelector('i').classList.remove('fa-circle');
+                            correctOption.querySelector('i').classList.add('fa-check');
+                        }
+                    }
+                }
+            }
+
+            // Drag and drop functionality
+            function allowDrop(ev) {
+                ev.preventDefault();
+            }
+
+            function drag(ev) {
+                ev.dataTransfer.setData("text", ev.target.id);
+            }
+
+            function drop(ev) {
+                ev.preventDefault();
+                const data = ev.dataTransfer.getData("text");
+                const draggedItem = document.getElementById(data);
+                const dropTarget = ev.target.closest('.drag-drop-area');
+
+                if (dropTarget && dropTarget.dataset.target === data) {
+                    dropTarget.innerHTML = draggedItem.innerHTML;
+                    dropTarget.classList.add('bg-green-100', 'border-green-500');
+                    dropTarget.classList.remove('drag-drop-area');
+
+                    // Show feedback
+                    const feedback = document.getElementById('drag-feedback');
+                    feedback.classList.remove('hidden');
+                    setTimeout(() => feedback.classList.add('hidden'), 2000);
+                }
+            }
+
+            function checkDragDrop() {
+                const dropAreas = document.querySelectorAll('[data-target]');
+                let allCorrect = true;
+
+                dropAreas.forEach(area => {
+                    if (!area.classList.contains('bg-green-100')) {
+                        allCorrect = false;
+                        area.classList.add('bg-red-100', 'border-red-500');
+                        setTimeout(() => {
+                            area.classList.remove('bg-red-100', 'border-red-500');
+                        }, 1000);
+                    }
+                });
+
+                if (allCorrect) {
+                    alert('Tebrikler! Tüm eşleştirmeleri doğru yaptınız!');
+                } else {
+                    alert('Bazı eşleştirmeler hatalı. Tekrar deneyin!');
+                }
+            }
+
+            // Circuit Builder functionality
+            let circuitElements = [];
+            let connectionPoints = [];
+            let wires = [];
+
+            function dragCircuitElement(ev) {
+                ev.dataTransfer.setData("text/plain", ev.target.dataset.type);
+            }
+
+            function dropCircuitElement(ev) {
+                ev.preventDefault();
+                const elementType = ev.dataTransfer.getData("text/plain");
+                const circuitBoard = document.getElementById('circuit-board');
+
+                // Create element
+                const element = document.createElement('div');
+                element.className = 'circuit-element absolute';
+                element.dataset.type = elementType;
+                element.style.left = `${ev.clientX - circuitBoard.getBoundingClientRect().left - 40}px`;
+                element.style.top = `${ev.clientY - circuitBoard.getBoundingClientRect().top - 40}px`;
+
+                // Add icon and text based on type
+                let iconClass, text;
+                switch (elementType) {
+                    case 'battery':
+                        iconClass = 'fas fa-battery-full text-red-500';
+                        text = 'Pil (9V)';
+                        break;
+                    case 'resistor':
+                        iconClass = 'fas fa-resistance text-blue-500';
+                        text = 'Direnç (10Ω)';
+                        break;
+                    case 'led':
+                        iconClass = 'fas fa-lightbulb text-yellow-500';
+                        text = 'LED';
+                        break;
+                    case 'switch':
+                        iconClass = 'fas fa-toggle-on text-green-500';
+                        text = 'Anahtar';
+                        break;
+                }
+
+                element.innerHTML = `
+                <i class="${iconClass}" style="font-size: 32px;"></i>
+                <span class="text-xs">${text}</span>
+                <div class="connection-point" style="left: 10px; top: 10px;"></div>
+                <div class="connection-point" style="right: 10px; bottom: 10px;"></div>
+            `;
+
+                // Make draggable
+                element.draggable = true;
+                element.addEventListener('dragstart', dragCircuitElement);
+
+                circuitBoard.appendChild(element);
+                circuitElements.push(element);
+            }
+
+            function clearCircuit() {
+                const circuitBoard = document.getElementById('circuit-board');
+                circuitBoard.innerHTML = '<div class="text-gray-500 text-center py-20">Bileşenleri buraya sürükleyip bırakarak devre oluşturun</div>';
+                circuitElements = [];
+                connectionPoints = [];
+                wires = [];
+            }
+
+            function testCircuit() {
+                const hasBattery = circuitElements.some(el => el.dataset.type === 'battery');
+                const hasResistor = circuitElements.some(el => el.dataset.type === 'resistor');
+                const hasLed = circuitElements.some(el => el.dataset.type === 'led');
+
+                if (!hasBattery) {
+                    alert('Devrede pil yok! Pikachu enerjisiz kaldı!');
+                } else if (!hasResistor && hasLed) {
+                    alert('LED için direnç gerekli! Voltorb patlamak üzere!');
+                } else {
+                    alert('Devre çalışıyor! Pikachu şarj oldu! ⚡');
+
+                    // Light up LEDs
+                    circuitElements.forEach(el => {
+                        if (el.dataset.type === 'led') {
+                            const icon = el.querySelector('i');
+                            icon.classList.remove('text-yellow-500');
+                            icon.classList.add('text-red-500', 'fa-beat');
+                        }
+                    });
+                }
+            }
+
+            // Module card click
+            document.querySelectorAll('.module-card').forEach(card => {
+                card.addEventListener('click', function () {
+                    const moduleTitle = this.querySelector('h3').textContent;
+                    alert(`"${moduleTitle}" modülüne gidiliyor!`);
+                });
+            });
+
+            // Floating animation for all Pokémon images
+            const pokemonImages = document.querySelectorAll('img[alt="Pikachu"], img[alt="Magnemite"], img[alt="Jolteon"], img[alt="Gyarados"], img[alt="Voltorb"], img[alt="Raichu"], img[alt="Electabuzz"], img[alt="Magnezone"]');
+            pokemonImages.forEach((img, index) => {
+                img.style.animationDelay = `${index * 0.2}s`;
+            });
+        </script>
+</body>
+
+</html>

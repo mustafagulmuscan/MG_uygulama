@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ben Daha Önce Hiç... | Fen Bilimleri Buz Kırıcı</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background-color: white;
+        }
+        
+        .pokeball-btn {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .pokeball-btn:before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 50%;
+            top: 0;
+            left: 0;
+            background-color: #ff1a1a;
+            border-radius: 9999px 9999px 0 0;
+        }
+        
+        .pokeball-btn:after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            top: calc(50% - 15px);
+            left: calc(50% - 15px);
+            background-color: white;
+            border: 4px solid #333;
+            border-radius: 50%;
+            z-index: 10;
+        }
+        
+        .entry-card {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .pokemon-map {
+            background-image: url('harita.png');
+            background-size: cover;
+            min-height: 500px;
+            position: relative;
+            border: 8px solid #ffcb05;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+        
+        .map-marker {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-color: #ff1a1a;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            left: 50%;
+            top: 50%;
+            margin: -20px 0 0 -20px;
+            animation: bounce 1s infinite alternate;
+        }
+        
+        .map-marker:after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            margin: 10px 0 0 10px;
+            background-color: #fff;
+            position: absolute;
+            border-radius: 50%;
+        }
+        
+        .pokemon-bubble {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            animation: float 3s ease-in-out infinite;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .pokemon-bubble:hover {
+            transform: scale(1.1);
+            z-index: 10;
+        }
+        
+        .pokemon-bubble img {
+            width: 80%;
+            height: 80%;
+            object-fit: contain;
+        }
+        
+        .pokemon-tooltip {
+            position: absolute;
+            background-color: white;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            z-index: 100;
+            display: none;
+            width: 200px;
+            font-size: 12px;
+            font-family: 'Press Start 2P', cursive;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        @keyframes bounce {
+            0% { transform: rotate(-45deg) translate(0, 0); }
+            100% { transform: rotate(-45deg) translate(0, -10px); }
+        }
+        
+        .typewriter {
+            overflow: hidden;
+            border-right: .15em solid #ffcb05;
+            white-space: nowrap;
+            margin: 0 auto;
+            letter-spacing: .15em;
+            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+        }
+        
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: #ffcb05; }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="text-center mb-8">
+            
+            <h1 class="text-3xl md:text-4xl font-bold text-yellow-400 mb-2 typewriter">BEN DAHA ÖNCE HİÇ...</h1>
+            <p class="text-blue-500 text-sm md:text-base">Fen Bilimleri Sınıfı Buz Kırıcı Etkinliği</p>
+            
+            <!-- Kendini Tanıt Button -->
+            <div class="mt-6">
+                <a href="#profile-section" class="pokeball-btn bg-white text-black font-bold py-3 px-6 rounded-full border-4 border-black relative overflow-hidden inline-block">
+                    <span class="relative z-20">KENDİNİ TANIT</span>
+                </a>
+            </div>
+        </header>
+        
+        <!-- Main Content -->
+        <main class="max-w-6xl mx-auto">
+            <!-- Profile Section -->
+            <section id="profile-section" class="bg-white bg-opacity-90 rounded-lg shadow-lg p-6 mb-8 border-4 border-yellow-400">
+                <h2 class="text-xl text-red-500 mb-4">Kendini Tanıt!</h2>
+                <form id="entry-form" class="space-y-4">
+                    <div class="flex items-center">
+                        <div class="bg-yellow-400 rounded-full p-2 mr-3">
+                            <i class="fas fa-user text-white"></i>
+                        </div>
+                        <input type="text" id="student-name" placeholder="Adınız" class="flex-1 border-b-2 border-blue-500 focus:outline-none focus:border-yellow-500 bg-transparent px-2 py-1" required>
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <p class="text-sm text-gray-700">"Ben daha önce hiç ______, ______, ______ yapmadım."</p>
+                        <div class="flex items-center mt-2">
+                            <div class="bg-blue-500 rounded-full p-2 mr-3">
+                                <i class="fas fa-pencil-alt text-white"></i>
+                            </div>
+                            <input type="text" id="entry-1" placeholder="Birinci boşluk" class="flex-1 border-b-2 border-blue-500 focus:outline-none focus:border-yellow-500 bg-transparent px-2 py-1" required>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="bg-blue-500 rounded-full p-2 mr-3">
+                                <i class="fas fa-pencil-alt text-white"></i>
+                            </div>
+                            <input type="text" id="entry-2" placeholder="İkinci boşluk" class="flex-1 border-b-2 border-blue-500 focus:outline-none focus:border-yellow-500 bg-transparent px-2 py-1" required>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="bg-blue-500 rounded-full p-2 mr-3">
+                                <i class="fas fa-pencil-alt text-white"></i>
+                            </div>
+                            <input type="text" id="entry-3" placeholder="Üçüncü boşluk" class="flex-1 border-b-2 border-blue-500 focus:outline-none focus:border-yellow-500 bg-transparent px-2 py-1" required>
+                        </div>
+                    </div>
+                    
+                    <div class="pt-4">
+                        <button type="submit" class="pokeball-btn bg-white text-black font-bold py-3 px-6 rounded-full border-4 border-black relative overflow-hidden w-full md:w-auto">
+                            <span class="relative z-20">GÖNDER</span>
+                        </button>
+                    </div>
+                </form>
+            </section>
+            
+            <!-- Map View Section (initially hidden) -->
+            <section id="map-section" class="hidden">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl text-red-500">Sınıf Arkadaşlarının Cevapları</h2>
+                    <button id="new-entry-btn" class="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded-full text-sm">
+                        Yeni Cevap Ekle
+                    </button>
+                </div>
+                
+                <div class="pokemon-map" id="pokemon-map">
+                    <!-- Map markers will be added here dynamically -->
+                    <div class="pokemon-tooltip" id="pokemon-tooltip"></div>
+                </div>
+            </section>
+            
+            <!-- List View Section (initially hidden) -->
+            <section id="list-section" class="hidden">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl text-red-500">Tüm Cevaplar</h2>
+                    <button id="show-map-btn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full text-sm">
+                        Haritada Göster
+                    </button>
+                </div>
+                
+                <div id="entries-container" class="space-y-4">
+                    <!-- Entries will be added here dynamically -->
+                </div>
+            </section>
+        </main>
+        
+        <!-- Footer -->
+        <footer class="mt-12 text-center text-xs text-gray-600">
+            <p>Fen Bilimleri Sınıfı Buz Kırıcı Etkinliği © 2023</p>
+            <div class="flex justify-center space-x-4 mt-2">
+                <i class="fab fa-github"></i>
+                <i class="fab fa-twitter"></i>
+                <i class="fab fa-instagram"></i>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('entry-form');
+            const profileSection = document.getElementById('profile-section');
+            const mapSection = document.getElementById('map-section');
+            const listSection = document.getElementById('list-section');
+            const entriesContainer = document.getElementById('entries-container');
+            const newEntryBtn = document.getElementById('new-entry-btn');
+            const showMapBtn = document.getElementById('show-map-btn');
+            const pokemonMap = document.getElementById('pokemon-map');
+            const tooltip = document.getElementById('pokemon-tooltip');
+            
+            // Pokémon images
+            const pokemonImages = [
+                'https://i.imgur.com/3uBwZqX.png', // Pikachu
+                'https://i.imgur.com/VyJkajI.png', // Bulbasaur
+                'https://i.imgur.com/9PmRZxQ.png', // Charmander
+                'https://i.imgur.com/6QqK9QZ.png', // Squirtle
+                'https://i.imgur.com/4VZQZ9Q.png', // Jigglypuff
+                'https://i.imgur.com/9Q9Q9Q9.png', // Meowth
+                'https://i.imgur.com/8Z8Z8Z8.png', // Psyduck
+                'https://i.imgur.com/7Q7Q7Q7.png'  // Snorlax
+            ];
+            
+            // Sample data (in a real app, this would come from a database)
+            let entries = [
+                {
+                    name: "Ayşe",
+                    items: ["denize girmedim", "bisiklet sürmedim", "mangal yapmadım"],
+                    reactions: {like: 3, laugh: 1, surprise: 0},
+                    location: {x: 20, y: 30}
+                },
+                {
+                    name: "Mehmet",
+                    items: ["yurtdışına çıkmadım", "kayak yapmadım", "piyano çalmadım"],
+                    reactions: {like: 5, laugh: 2, surprise: 1},
+                    location: {x: 70, y: 50}
+                },
+                {
+                    name: "Zeynep",
+                    items: ["kampa gitmedim", "balon uçurmadım", "kurabiye pişirmedim"],
+                    reactions: {like: 2, laugh: 0, surprise: 3},
+                    location: {x: 40, y: 70}
+                }
+            ];
+            
+            // Form submission
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const name = document.getElementById('student-name').value;
+                const entry1 = document.getElementById('entry-1').value;
+                const entry2 = document.getElementById('entry-2').value;
+                const entry3 = document.getElementById('entry-3').value;
+                
+                // Random location on map
+                const x = Math.floor(Math.random() * 80) + 10;
+                const y = Math.floor(Math.random() * 80) + 10;
+                
+                // Add new entry
+                const newEntry = {
+                    name: name,
+                    items: [entry1, entry2, entry3],
+                    reactions: {like: 0, laugh: 0, surprise: 0},
+                    location: {x: x, y: y}
+                };
+                
+                entries.unshift(newEntry); // Add to beginning of array
+                
+                // Show results
+                form.reset();
+                profileSection.classList.add('hidden');
+                mapSection.classList.remove('hidden');
+                listSection.classList.add('hidden');
+                
+                // Display all entries on map
+                displayMapEntries();
+            });
+            
+            // New entry button
+            newEntryBtn.addEventListener('click', function() {
+                mapSection.classList.add('hidden');
+                listSection.classList.add('hidden');
+                profileSection.classList.remove('hidden');
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            });
+            
+            // Show map button
+            showMapBtn.addEventListener('click', function() {
+                listSection.classList.add('hidden');
+                mapSection.classList.remove('hidden');
+                displayMapEntries();
+            });
+            
+            // Display all entries on map
+            function displayMapEntries() {
+                // Clear existing markers
+                const existingMarkers = document.querySelectorAll('.map-marker, .pokemon-bubble');
+                existingMarkers.forEach(marker => marker.remove());
+                
+                // Add new markers
+                entries.forEach((entry, index) => {
+                    // Create marker
+                    const marker = document.createElement('div');
+                    marker.className = 'map-marker';
+                    marker.style.left = `${entry.location.x}%`;
+                    marker.style.top = `${entry.location.y}%`;
+                    marker.dataset.index = index;
+                    
+                    // Add Pokémon bubble near the marker
+                    const pokemonIndex = index % pokemonImages.length;
+                    const pokemonBubble = document.createElement('div');
+                    pokemonBubble.className = 'pokemon-bubble';
+                    pokemonBubble.style.width = '60px';
+                    pokemonBubble.style.height = '60px';
+                    pokemonBubble.style.left = `calc(${entry.location.x}% - 30px)`;
+                    pokemonBubble.style.top = `calc(${entry.location.y}% - 80px)`;
+                    pokemonBubble.dataset.index = index;
+                    
+                    const pokemonImg = document.createElement('img');
+                    pokemonImg.src = pokemonImages[pokemonIndex];
+                    pokemonImg.alt = 'Pokémon';
+                    
+                    pokemonBubble.appendChild(pokemonImg);
+                    
+                    // Add click event to show tooltip
+                    pokemonBubble.addEventListener('click', function() {
+                        showTooltip(entry, this);
+                    });
+                    
+                    // Add to map
+                    pokemonMap.appendChild(marker);
+                    pokemonMap.appendChild(pokemonBubble);
+                });
+            }
+            
+            // Display all entries in list
+            function displayListEntries() {
+                entriesContainer.innerHTML = '';
+                
+                entries.forEach((entry, index) => {
+                    const entryCard = document.createElement('div');
+                    entryCard.className = 'entry-card bg-white bg-opacity-90 rounded-lg shadow-md p-4 border-l-4 border-yellow-400';
+                    
+                    entryCard.innerHTML = `
+                        <div class="flex items-start mb-2">
+                            <div class="bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3">
+                                ${entry.name.charAt(0).toUpperCase()}
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-blue-600">${entry.name}</h3>
+                                <p class="text-sm text-gray-700">"Ben daha önce hiç <span class="font-bold">${entry.items[0]}</span>, <span class="font-bold">${entry.items[1]}</span>, <span class="font-bold">${entry.items[2]}</span> yapmadım."</p>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mt-3">
+                            <div class="flex space-x-2">
+                                <button onclick="react(${index}, 'like')" class="reaction-btn hover:bg-gray-100 rounded-full p-1 text-gray-500 hover:text-red-500">
+                                    <i class="fas fa-thumbs-up"></i> ${entry.reactions.like}
+                                </button>
+                                <button onclick="react(${index}, 'laugh')" class="reaction-btn hover:bg-gray-100 rounded-full p-1 text-gray-500 hover:text-yellow-500">
+                                    <i class="fas fa-laugh"></i> ${entry.reactions.laugh}
+                                </button>
+                                <button onclick="react(${index}, 'surprise')" class="reaction-btn hover:bg-gray-100 rounded-full p-1 text-gray-500 hover:text-blue-500">
+                                    <i class="fas fa-surprise"></i> ${entry.reactions.surprise}
+                                </button>
+                            </div>
+                            <div class="text-xs text-gray-400">
+                                <i class="fas fa-clock"></i> Şimdi
+                            </div>
+                        </div>
+                    `;
+                    
+                    entriesContainer.appendChild(entryCard);
+                });
+            }
+            
+            // Show tooltip for Pokémon bubble
+            function showTooltip(entry, element) {
+                tooltip.innerHTML = `
+                    <h3 class="font-bold text-blue-600 mb-1">${entry.name}</h3>
+                    <p class="text-xs text-gray-700 mb-2">"Ben daha önce hiç <span class="font-bold">${entry.items[0]}</span>, <span class="font-bold">${entry.items[1]}</span>, <span class="font-bold">${entry.items[2]}</span> yapmadım."</p>
+                    <div class="flex space-x-2">
+                        <button onclick="react(${entries.indexOf(entry)}, 'like')" class="reaction-btn hover:bg-gray-100 rounded-full p-1 text-gray-500 hover:text-red-500">
+                            <i class="fas fa-thumbs-up"></i> ${entry.reactions.like}
+                        </button>
+                        <button onclick="react(${entries.indexOf(entry)}, 'laugh')" class="reaction-btn hover:bg-gray-100 rounded-full p-1 text-gray-500 hover:text-yellow-500">
+                            <i class="fas fa-laugh"></i> ${entry.reactions.laugh}
+                        </button>
+                        <button onclick="react(${entries.indexOf(entry)}, 'surprise')" class="reaction-btn hover:bg-gray-100 rounded-full p-1 text-gray-500 hover:text-blue-500">
+                            <i class="fas fa-surprise"></i> ${entry.reactions.surprise}
+                        </button>
+                    </div>
+                `;
+                
+                // Position tooltip
+                const rect = element.getBoundingClientRect();
+                const mapRect = pokemonMap.getBoundingClientRect();
+                
+                tooltip.style.left = `${rect.left - mapRect.left + rect.width/2 - 100}px`;
+                tooltip.style.top = `${rect.top - mapRect.top - 120}px`;
+                tooltip.style.display = 'block';
+                
+                // Hide tooltip when clicking elsewhere
+                setTimeout(() => {
+                    document.addEventListener('click', function hideTooltip(e) {
+                        if (!element.contains(e.target) && !tooltip.contains(e.target)) {
+                            tooltip.style.display = 'none';
+                            document.removeEventListener('click', hideTooltip);
+                        }
+                    });
+                }, 100);
+            }
+            
+            // Initial display if there are entries (for demo purposes)
+            if (entries.length > 0) {
+                profileSection.classList.add('hidden');
+                mapSection.classList.remove('hidden');
+                displayMapEntries();
+            }
+        });
+        
+        // Global function for reactions
+        function react(index, type) {
+            // In a real app, this would update the database
+            const entries = document.entries || window.entries;
+            entries[index].reactions[type]++;
+            
+            // Update reactions in list view
+            const reactionBtns = document.querySelectorAll('.reaction-btn');
+            if (reactionBtns.length > 0) {
+                reactionBtns[index*3].innerHTML = `<i class="fas fa-thumbs-up"></i> ${entries[index].reactions.like}`;
+                reactionBtns[index*3+1].innerHTML = `<i class="fas fa-laugh"></i> ${entries[index].reactions.laugh}`;
+                reactionBtns[index*3+2].innerHTML = `<i class="fas fa-surprise"></i> ${entries[index].reactions.surprise}`;
+            }
+            
+            // Update reactions in tooltip
+            const tooltip = document.getElementById('pokemon-tooltip');
+            if (tooltip.style.display === 'block') {
+                const tooltipBtns = tooltip.querySelectorAll('.reaction-btn');
+                tooltipBtns[0].innerHTML = `<i class="fas fa-thumbs-up"></i> ${entries[index].reactions.like}`;
+                tooltipBtns[1].innerHTML = `<i class="fas fa-laugh"></i> ${entries[index].reactions.laugh}`;
+                tooltipBtns[2].innerHTML = `<i class="fas fa-surprise"></i> ${entries[index].reactions.surprise}`;
+            }
+        }
+    </script>
+</html>

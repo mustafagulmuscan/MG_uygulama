@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <title>🎁 Ödüller Marketi</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', sans-serif;
+      background-color: #fff8e1;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #e65100;
+    }
+
+    .coin-display {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #bf360c;
+      font-weight: bold;
+    }
+
+    ul {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      background-color: #ffe0b2;
+      border: 3px solid #ffb74d;
+      border-radius: 12px;
+      padding: 20px;
+      width: 180px;
+      box-shadow: 0 0 6px rgba(0,0,0,0.2);
+    }
+
+    img {
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: #ff7043;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:disabled {
+      background-color: gray;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+
+<body>
+  <h2>🎁 Ödüller Marketi</h2>
+  <div class="coin-display">Coin: <span id="coinAmount">0</span></div>
+
+  <ul>
+    <!-- Boos 1 -->
+    <li>
+      <img src="pikachu.jpg" width="100"><br>
+      <strong>Pikachu</strong><br>30 coin
+      <br><button id="btn-Pikachu" onclick="buyItem('Pikachu', 30)">Satın Al</button>
+    </li>
+    <li>
+      <img src="charmander.jpeg" width="100"><br>
+      <strong>Charmander</strong><br>30 coin
+      <br><button id="btn-Charmander" onclick="buyItem('Charmander', 30)">Satın Al</button>
+    </li>
+
+    <!-- Boos 2 -->
+    <li>
+      <img src="Squirtle.jpg" width="100"><br>
+      <strong>Squirtle</strong><br>30 coin
+      <br><button id="btn-Squirtle" onclick="buyItem('Squirtle', 30)">Satın Al</button>
+    </li>
+    <li>
+      <img src="Bulbasaur.jpg" width="100"><br>
+      <strong>Bulbasaur</strong><br>30 coin
+      <br><button id="btn-Bulbasaur" onclick="buyItem('Bulbasaur', 30)">Satın Al</button>
+    </li>
+
+    <!-- Boos 3 -->
+    <li>
+      <img src="Raichu.jpg" width="100"><br>
+      <strong>Raichu</strong><br>40 coin
+      <br><button id="btn-Raichu" onclick="buyItem('Raichu', 40)">Satın Al</button>
+    </li>
+    <li>
+      <img src="Elekid.jpg" width="100"><br>
+      <strong>Elekid</strong><br>40 coin
+      <br><button id="btn-Elekid" onclick="buyItem('Elekid', 40)">Satın Al</button>
+    </li>
+  </ul>
+
+  <script>
+    let coin = parseInt(localStorage.getItem("coin")) || 0;
+    document.getElementById("coinAmount").textContent = coin;
+
+    const items = ["Pikachu", "Charmander", "Squirtle", "Bulbasaur", "Raichu", "Elekid"];
+
+    function buyItem(item, price) {
+      if (localStorage.getItem(item) === "true") {
+        alert("Bu ürün zaten satın alındı!");
+        return;
+      }
+
+      if (coin >= price) {
+        coin -= price;
+        localStorage.setItem("coin", coin);
+        localStorage.setItem(item, "true");
+        document.getElementById("coinAmount").textContent = coin;
+        disableButton(item);
+        alert(`🎉 ${item} başarıyla satın alındı!`);
+      } else {
+        alert("❌ Yetersiz coin!");
+      }
+    }
+
+    function disableButton(item) {
+      const btn = document.getElementById("btn-" + item);
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = "Satın Alındı ✅";
+      }
+    }
+
+    // Sayfa açıldığında satın alınanları kontrol et
+    items.forEach(item => {
+      if (localStorage.getItem(item) === "true") {
+        disableButton(item);
+      }
+    });
+  </script>
+</body>
+
+</html>

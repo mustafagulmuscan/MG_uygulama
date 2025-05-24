@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PokéLearn - Elektrik ve Pokémon</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Press+Start+2P&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="%23FF0000" stroke="%23ffffff" stroke-width="2" opacity="0.05"/></svg>');
+            background-size: 100px;
+        }
+
+        .retro-font {
+            font-family: 'Press Start 2P', cursive;
+        }
+
+        .pokeball-bg {
+            background: radial-gradient(circle at center, #FF0000 0%, #FF0000 45%, #ffffff 45%, #ffffff 50%, #000000 50%, #000000 55%, #ffffff 55%, #ffffff 100%);
+        }
+
+        .type-electric {
+            background-color: #F8D030;
+            color: #000;
+        }
+
+        .type-steel {
+            background-color: #B8B8D0;
+        }
+
+        .type-psychic {
+            background-color: #F85888;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .video-module {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .progress-bar {
+            height: 5px;
+            background: linear-gradient(90deg, #FF0000, #FFCC00);
+        }
+
+        .module-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 0, 0, 0.2);
+        }
+
+        .activity-tab {
+            transition: all 0.3s ease;
+        }
+
+        .activity-tab.active {
+            background-color: #F8D030;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .drag-drop-area {
+            min-height: 150px;
+            border: 2px dashed #F8D030;
+            background-color: rgba(248, 208, 48, 0.1);
+        }
+
+        .drag-item {
+            cursor: grab;
+            transition: transform 0.2s;
+        }
+
+        .drag-item:active {
+            cursor: grabbing;
+            transform: scale(1.05);
+        }
+
+        .quiz-option {
+            transition: all 0.2s;
+        }
+
+        .quiz-option:hover {
+            background-color: rgba(248, 208, 48, 0.3);
+        }
+
+        .quiz-option.correct {
+            background-color: #78C850;
+            color: white;
+        }
+
+        .quiz-option.incorrect {
+            background-color: #F85888;
+            color: white;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+    
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Hero Section -->
+        <section
+            class="bg-gradient-to-r from-red-600 to-yellow-500 rounded-xl p-8 mb-12 text-white relative overflow-hidden">
+            <div class="absolute inset-0 opacity-10">
+                <div class="absolute top-0 left-0 w-32 h-32 rounded-full bg-white opacity-20"></div>
+                <div class="absolute bottom-0 right-0 w-48 h-48 rounded-full bg-white opacity-20"></div>
+            </div>
+            <div class="relative z-10 flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-6 md:mb-0">
+                    <h2 class="retro-font text-3xl md:text-4xl mb-4">Elektrik ve Pokémon!</h2>
+                    <p class="text-lg mb-6">Direnç, akım ve Ohm Kanunu'nu Pikachu ile öğren!</p>
+                    
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <div class="relative w-64 h-64">
+                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png"
+                            alt="Pikachu" class="w-full h-full object-contain floating" style="animation-delay: 0.2s;">
+                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/81.png"
+                            alt="Magnemite" class="absolute -bottom-4 -left-4 w-20 h-20 object-contain floating"
+                            style="animation-delay: 0.4s;">
+                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/462.png"
+                            alt="Magnezone" class="absolute top-4 -right-4 w-20 h-20 object-contain floating"
+                            style="animation-delay: 0.6s;">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Video Module Section -->
+        <section class="mb-12">
+            <h2 class="retro-font text-2xl mb-6 text-gray-800 flex items-center">
+                <i class="fas fa-bolt mr-3 text-yellow-500"></i> Direnç, Akım ve Ohm Kanunu
+            </h2>
+
+            <div class="video-module p-4 mb-6">
+                <div class="aspect-w-16 aspect-h-9 bg-black rounded-lg overflow-hidden">
+                    <iframe src="https://furkan.h5p.com/content/1292595326984320237/embed" aria-label="OHM Yasası"
+                        width="1088" height="637" frameborder="0" allowfullscreen="allowfullscreen"
+                        allow="autoplay *; geolocation *; microphone *; camera *; midi *; encrypted-media *"></iframe>
+                    <script src="https://furkan.h5p.com/js/h5p-resizer.js" charset="UTF-8"></script>
+                </div>
+                
+            </div>
+
+            <!-- Activity Tabs -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
+                <div class="flex border-b">
+                    <button class="activity-tab active flex-1 py-3 px-4 text-center" onclick="openActivityTab('notes')">
+                        <i class="fas fa-sticky-note mr-2"></i> Ders Notları
+                    </button>
+                    <button class="activity-tab flex-1 py-3 px-4 text-center" onclick="openActivityTab('quiz')">
+                        <i class="fas fa-question-circle mr-2"></i> Test
+                    </button>
+                    <button class="activity-tab flex-1 py-3 px-4 text-center" onclick="openActivityTab('dragdrop')">
+                        <i class="fas fa-arrows-alt mr-2"></i> Sürükle-Bırak
+                    </button>
+                </div>
+
+                <!-- Notes Tab -->
+                <div id="notes-tab" class="activity-content p-6">
+                    <h3 class="text-xl font-bold mb-4 text-gray-800">Ders Notları</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div class="bg-gray-100 p-4 rounded-lg">
+                            <h4 class="font-bold text-yellow-600 mb-2">Direnç (R)</h4>
+                            <p class="text-gray-700">Bir elektrik devresinde akımın geçişine karşı gösterilen zorluktur.
+                                Pikachu'nun Thunder Shock saldırısının gücü, karşı Pokémon'un direncine bağlıdır!</p>
+                            <p class="mt-2 text-sm text-gray-600">Birimi: Ohm (Ω)</p>
+                        </div>
+                        <div class="bg-gray-100 p-4 rounded-lg">
+                            <h4 class="font-bold text-blue-600 mb-2">Akım (I)</h4>
+                            <p class="text-gray-700">Elektrik yüklerinin bir iletken içindeki hareketidir. Magnemite'nin
+                                manyetik alanı ne kadar güçlüyse, akım da o kadar yüksektir!</p>
+                            <p class="mt-2 text-sm text-gray-600">Birimi: Amper (A)</p>
+                        </div>
+                    </div>
+                    <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                        <h4 class="font-bold text-red-600 mb-2">Ohm Kanunu</h4>
+                        <p class="text-gray-700">V = I × R</p>
+                        <p class="text-gray-700 mt-2">Bir devredeki gerilim (V), akım (I) ve direnç (R) arasındaki
+                            ilişkiyi gösterir. Elektrik türü Pokémon'lar bu dengeyi mükemmel kullanır!</p>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="text" placeholder="Not ekle..."
+                            class="flex-grow border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                        <button class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-r-lg">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quiz Tab -->
+                <div id="quiz-tab" class="activity-content p-6 hidden">
+                    
+                    <h3 class="text-xl font-bold mb-4 text-gray-800">Test Etkinliği</h3>
+                    <div class="mb-6">
+                        <h4 class="font-bold mb-3">1. Pikachu'nun Thunder Shock saldırısının gücü aşağıdakilerden
+                            hangisine bağlıdır?</h4>
+                        <div class="space-y-2">
+                            <div class="quiz-option p-3 border rounded-lg" onclick="checkAnswer(this, true)">
+                                <i class="fas fa-circle mr-2"></i> Karşı Pokémon'un elektrik direncine
+                            </div>
+                            <div class="quiz-option p-3 border rounded-lg" onclick="checkAnswer(this, false)">
+                                <i class="fas fa-circle mr-2"></i> Pikachu'nun boyutuna
+                            </div>
+                            <div class="quiz-option p-3 border rounded-lg" onclick="checkAnswer(this, false)">
+                                <i class="fas fa-circle mr-2"></i> Hava durumuna
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-6">
+                        <h4 class="font-bold mb-3">2. Ohm Kanunu formülü aşağıdakilerden hangisidir?</h4>
+                        <div class="space-y-2">
+                            <div class="quiz-option p-3 border rounded-lg" onclick="checkAnswer(this, false)">
+                                <i class="fas fa-circle mr-2"></i> P = I × V
+                            </div>
+                            <div class="quiz-option p-3 border rounded-lg" onclick="checkAnswer(this, true)">
+                                <i class="fas fa-circle mr-2"></i> V = I × R
+                            </div>
+                            <div class="quiz-option p-3 border rounded-lg" onclick="checkAnswer(this, false)">
+                                <i class="fas fa-circle mr-2"></i> R = V + I
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-6">
+                        <h4 class="font-bold mb-3">3. Magnemite'nin manyetik alanı güçlendikçe ne olur?</h4>
+                        <div class="space-y-2">
+                            <div class="quiz-option p-3 border rounded-lg" onclick="checkAnswer(this, false)">
+                                <i class="fas fa-circle mr-2"></i> Direnci artar
+                            </div>
+                            <div class="quiz-option p-3 border rounded-lg" onclick="checkAnswer(this, true)">
+                                <i class="fas fa-circle mr-2"></i> Akımı artar
+                            </div>
+                            <div class="quiz-option p-3 border rounded-lg" onclick="checkAnswer(this, false)">
+                                <i class="fas fa-circle mr-2"></i> Voltajı azalır
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-2 rounded-lg">
+                        <i class="fas fa-check mr-2"></i> Testi Tamamla
+                    </button>
+                </div>
+
+                <!-- Drag & Drop Tab -->
+                <div id="dragdrop-tab" class="activity-content p-6 hidden">
+                    <h3 class="text-xl font-bold mb-4 text-gray-800">Sürükle-Bırak Etkinliği</h3>
+                    <p class="mb-4">Aşağıdaki terimleri doğru tanımların üzerine sürükleyerek eşleştirin!</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Drag Items -->
+                        <div>
+                            <h4 class="font-bold mb-3 text-yellow-600">Terimler</h4>
+                            <div class="space-y-3">
+                                <div class="drag-item bg-white p-3 border border-yellow-500 rounded-lg shadow-sm"
+                                    draggable="true" ondragstart="drag(event)" id="drag1">
+                                    <i class="fas fa-arrows-alt mr-2 text-gray-400"></i> Direnç (R)
+                                </div>
+                                <div class="drag-item bg-white p-3 border border-yellow-500 rounded-lg shadow-sm"
+                                    draggable="true" ondragstart="drag(event)" id="drag2">
+                                    <i class="fas fa-arrows-alt mr-2 text-gray-400"></i> Akım (I)
+                                </div>
+                                <div class="drag-item bg-white p-3 border border-yellow-500 rounded-lg shadow-sm"
+                                    draggable="true" ondragstart="drag(event)" id="drag3">
+                                    <i class="fas fa-arrows-alt mr-2 text-gray-400"></i> Voltaj (V)
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Drop Area -->
+                        <div>
+                            <h4 class="font-bold mb-3 text-blue-600">Tanımlar</h4>
+                            <div class="space-y-3">
+                                <div class="drag-drop-area p-4 rounded-lg mb-3" ondragover="allowDrop(event)"
+                                    ondrop="drop(event)" data-target="drag1">
+                                    Elektrik yüklerinin hareketine karşı gösterilen zorluk
+                                </div>
+                                <div class="drag-drop-area p-4 rounded-lg mb-3" ondragover="allowDrop(event)"
+                                    ondrop="drop(event)" data-target="drag2">
+                                    Elektrik yüklerinin bir iletkendeki hareketi
+                                </div>
+                                <div class="drag-drop-area p-4 rounded-lg" ondragover="allowDrop(event)"
+                                    ondrop="drop(event)" data-target="drag3">
+                                    Elektrik devresindeki enerji farkı
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 flex justify-between items-center">
+                        <div id="drag-feedback" class="text-green-600 font-bold hidden">
+                            <i class="fas fa-check-circle mr-2"></i> Doğru eşleştirme!
+                        </div>
+                        <button class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-2 rounded-lg"
+                            onclick="checkDragDrop()">
+                            <i class="fas fa-check mr-2"></i> Kontrol Et
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Modules Section -->
+        
+    <script>
+        // Tab functionality
+        function openActivityTab(tabName) {
+            const tabs = document.querySelectorAll('.activity-tab');
+            const contents = document.querySelectorAll('.activity-content');
+
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.classList.add('hidden'));
+
+            document.querySelector(`.activity-tab[onclick="openActivityTab('${tabName}')"]`).classList.add('active');
+            document.getElementById(`${tabName}-tab`).classList.remove('hidden');
+        }
+
+        // Quiz functionality
+        function checkAnswer(element, isCorrect) {
+            const options = element.parentElement.querySelectorAll('.quiz-option');
+            options.forEach(opt => {
+                opt.classList.remove('correct', 'incorrect');
+                opt.querySelector('i').classList.remove('fa-check', 'fa-times');
+                opt.querySelector('i').classList.add('fa-circle');
+            });
+
+            if (isCorrect) {
+                element.classList.add('correct');
+                element.querySelector('i').classList.remove('fa-circle');
+                element.querySelector('i').classList.add('fa-check');
+            } else {
+                element.classList.add('incorrect');
+                element.querySelector('i').classList.remove('fa-circle');
+                element.querySelector('i').classList.add('fa-times');
+
+                // Find and show correct answer
+                const correctOption = Array.from(options).find(opt => !opt.classList.contains('incorrect'));
+                if (correctOption) {
+                    correctOption.classList.add('correct');
+                    correctOption.querySelector('i').classList.remove('fa-circle');
+                    correctOption.querySelector('i').classList.add('fa-check');
+                }
+            }
+        }
+
+        // Drag and drop functionality
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function drag(ev) {
+            ev.dataTransfer.setData("text", ev.target.id);
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            const data = ev.dataTransfer.getData("text");
+            const draggedItem = document.getElementById(data);
+            const dropTarget = ev.target.closest('.drag-drop-area');
+
+            if (dropTarget && dropTarget.dataset.target === data) {
+                dropTarget.innerHTML = draggedItem.innerHTML;
+                dropTarget.classList.add('bg-green-100', 'border-green-500');
+                dropTarget.classList.remove('drag-drop-area');
+
+                // Show feedback
+                const feedback = document.getElementById('drag-feedback');
+                feedback.classList.remove('hidden');
+                setTimeout(() => feedback.classList.add('hidden'), 2000);
+            }
+        }
+
+        function checkDragDrop() {
+            const dropAreas = document.querySelectorAll('[data-target]');
+            let allCorrect = true;
+
+            dropAreas.forEach(area => {
+                if (!area.classList.contains('bg-green-100')) {
+                    allCorrect = false;
+                    area.classList.add('bg-red-100', 'border-red-500');
+                    setTimeout(() => {
+                        area.classList.remove('bg-red-100', 'border-red-500');
+                    }, 1000);
+                }
+            });
+
+            if (allCorrect) {
+                alert('Tebrikler! Tüm eşleştirmeleri doğru yaptınız!');
+            } else {
+                alert('Bazı eşleştirmeler hatalı. Tekrar deneyin!');
+            }
+        }
+
+        // Module card click
+        document.querySelectorAll('.module-card').forEach(card => {
+            card.addEventListener('click', function () {
+                const moduleTitle = this.querySelector('h3').textContent;
+                alert(`"${moduleTitle}" modülüne gidiliyor!`);
+            });
+        });
+
+        // Floating animation for all Pokémon images
+        const pokemonImages = document.querySelectorAll('img[alt="Pikachu"], img[alt="Magnemite"], img[alt="Magnezone"], img[alt="Jolteon"]');
+        pokemonImages.forEach((img, index) => {
+            img.style.animationDelay = `${index * 0.2}s`;
+        });
+    </script>
+</body>
+
+</html>

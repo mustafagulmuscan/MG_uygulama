@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Savaşma Zamanı | 7. Sınıf Elektrik Ünitesi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --electric-yellow: #FFD700;
+            --electric-blue: #00BFFF;
+            --health-green: #4CAF50;
+            --health-red: #F44336;
+            --boss-purple: #9C27B0;
+        }
+
+        body {
+            font-family: 'Press Start 2P', cursive;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #000;
+            color: white;
+            touch-action: manipulation;
+        }
+
+        .game-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(to bottom, #1a1a2e 0%, #16213e 100%);
+            overflow: hidden;
+        }
+
+        .background {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: url('arkaplan.jpeg');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.7;
+        }
+
+        .battlefield {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .ground {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 30%;
+            background-size: cover;
+            background-position: center;
+            border-top: 8px solid #5D4037;
+        }
+
+        .pokemon {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            bottom: 100px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            transition: all 0.3s ease;
+            z-index: 10;
+            image-rendering: pixelated;
+        }
+
+        #player-container {
+            position: absolute;
+            left: 20%;
+            bottom: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 15;
+        }
+
+        #player {
+            left: 0;
+            background-image: url('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png');
+        }
+
+        #boss {
+            right: 20%;
+            background-image: url('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/466.png');
+            transform: scaleX(-1);
+        }
+
+        .health-bar {
+            position: relative;
+            width: 200px;
+            height: 20px;
+            background-color: #333;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid #000;
+            margin-bottom: 10px;
+        }
+
+        .health-fill {
+            height: 100%;
+            transition: width 0.3s;
+        }
+
+        #player-health-fill {
+            background-color: var(--health-green);
+        }
+
+        #boss-health-fill {
+            background-color: var(--boss-purple);
+        }
+
+        .health-text {
+            font-size: 12px;
+            color: white;
+            text-shadow: 2px 2px 2px #000;
+            margin-bottom: 5px;
+        }
+
+        .question-container {
+            position: absolute;
+            top: 20px;
+            /* Sayfanın üst kısmından 20px aşağıda */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 800px;
+            background-color: rgba(0, 0, 0, 0.8);
+            border: 4px solid var(--electric-yellow);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            transition: all 0.3s ease;
+            z-index: 20;
+        }
+
+
+        .question-text {
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: var(--electric-yellow);
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.5;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .option-btn {
+            padding: 12px;
+            background-color: var(--electric-blue);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 0 #0066CC;
+        }
+
+        .option-btn:hover {
+            background-color: #0099FF;
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #0066CC;
+        }
+
+        .option-btn:active {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
+
+        .combo-counter {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--electric-yellow);
+            color: #1a1a2e;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            border: 3px solid #fff;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+            z-index: 15;
+            display: none;
+        }
+
+        .lightning {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            display: none;
+            z-index: 5;
+        }
+
+        .lightning-line {
+            position: absolute;
+            background-color: var(--electric-yellow);
+            height: 3px;
+            box-shadow: 0 0 10px var(--electric-yellow);
+            transform-origin: left center;
+        }
+
+        .pokemon-selector {
+            position: absolute;
+            bottom: 200px;
+            left: 50px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 25;
+        }
+
+        .pokemon-selector-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 3px solid white;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .pokemon-selector-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .pokemon-selector-btn.active {
+            border-color: var(--electric-yellow);
+            box-shadow: 0 0 10px var(--electric-yellow);
+        }
+
+        .game-over {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 30;
+            color: var(--health-red);
+            font-size: 32px;
+            text-align: center;
+            display: none;
+        }
+
+        .game-over-buttons {
+            display: flex;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .game-over-btn {
+            padding: 15px 30px;
+            background-color: var(--electric-blue);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #0066CC;
+            transition: all 0.2s;
+        }
+
+        .game-over-btn:hover {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #0066CC;
+        }
+
+        .game-over-btn:active {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
+
+        .boss-intro {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 30;
+            color: white;
+            font-size: 24px;
+            text-align: center;
+        }
+
+        .boss-title {
+            color: var(--boss-purple);
+            font-size: 32px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px var(--boss-purple);
+        }
+
+        .boss-image {
+            width: 200px;
+            height: 200px;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            margin-bottom: 30px;
+        }
+
+        .start-btn {
+            padding: 15px 30px;
+            background-color: var(--electric-yellow);
+            border: none;
+            border-radius: 8px;
+            color: #1a1a2e;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #CC9900;
+            transition: all 0.2s;
+            margin-top: 30px;
+        }
+
+        .start-btn:hover {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #CC9900;
+        }
+
+        .start-btn:active {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
+
+        .sound-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            border: 2px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 25;
+        }
+
+        .sound-icon {
+            color: white;
+            font-size: 20px;
+        }
+
+        @keyframes zap {
+            0% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes shake {
+            0% {
+                transform: translate(0, 0) scaleX(-1);
+            }
+
+            10% {
+                transform: translate(-5px, 0) scaleX(-1);
+            }
+
+            20% {
+                transform: translate(5px, 0) scaleX(-1);
+            }
+
+            30% {
+                transform: translate(-5px, 0) scaleX(-1);
+            }
+
+            40% {
+                transform: translate(5px, 0) scaleX(-1);
+            }
+
+            50% {
+                transform: translate(-5px, 0) scaleX(-1);
+            }
+
+            60% {
+                transform: translate(5px, 0) scaleX(-1);
+            }
+
+            70% {
+                transform: translate(-5px, 0) scaleX(-1);
+            }
+
+            80% {
+                transform: translate(5px, 0) scaleX(-1);
+            }
+
+            90% {
+                transform: translate(-5px, 0) scaleX(-1);
+            }
+
+            100% {
+                transform: translate(0, 0) scaleX(-1);
+            }
+        }
+
+        @keyframes playerAttack {
+            0% {
+                transform: translateX(0);
+            }
+
+            50% {
+                transform: translateX(150px);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes bossAttack {
+            0% {
+                transform: translateX(0) scaleX(-1);
+            }
+
+            50% {
+                transform: translateX(-150px) scaleX(-1);
+            }
+
+            100% {
+                transform: translateX(0) scaleX(-1);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+        }
+
+        @keyframes flash {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s forwards;
+        }
+
+        .fade-out {
+            animation: fadeOut 0.3s forwards;
+        }
+
+        .flash {
+            animation: flash 0.3s 3;
+        }
+
+        .ability-container {
+            position: absolute;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 15;
+            display: none;
+        }
+
+        .ability-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 2px solid var(--electric-yellow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .ability-icon:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px var(--electric-yellow);
+        }
+
+        .ability-tooltip {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.9);
+            border: 2px solid var(--electric-yellow);
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 12px;
+            width: 150px;
+            display: none;
+            z-index: 20;
+        }
+
+        @media (max-width: 768px) {
+            .pokemon {
+                width: 100px;
+                height: 100px;
+            }
+
+            #player-container {
+                left: 10%;
+            }
+
+            #boss {
+                right: 10%;
+            }
+
+            .health-bar {
+                width: 150px;
+            }
+
+            .question-text {
+                font-size: 14px;
+            }
+
+            .options {
+                grid-template-columns: 1fr;
+            }
+
+            .option-btn {
+                font-size: 10px;
+                padding: 8px;
+            }
+
+            .pokemon-selector {
+                bottom: 150px;
+                left: 20px;
+            }
+
+            .pokemon-selector-btn {
+                width: 40px;
+                height: 40px;
+            }
+
+            .boss-title {
+                font-size: 24px;
+            }
+
+            .boss-image {
+                width: 150px;
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="game-container">
+        <div class="background"></div>
+        <div class="battlefield">
+
+
+            <!-- Combo Counter -->
+            <div class="combo-counter" id="combo-counter"></div>
+
+            <!-- Ability Container -->
+            <div class="ability-container" id="ability-container"></div>
+
+            <!-- Player -->
+            <div id="player-container">
+                <div class="health-bar" id="player-health">
+                    <div class="health-fill" id="player-health-fill"></div>
+                </div>
+                <div class="health-text" id="player-health-text">3/3</div>
+                <div class="pokemon" id="player"></div>
+            </div>
+
+            <!-- Boss -->
+            <div class="pokemon" id="boss"></div>
+            <div class="health-bar" id="boss-health">
+                <div class="health-fill" id="boss-health-fill"></div>
+            </div>
+            <div class="health-text" id="boss-health-text">5/5</div>
+
+            <!-- Pokemon Selector -->
+            <div class="pokemon-selector" id="pokemon-selector"></div>
+
+            <!-- Lightning Effect -->
+            <div class="lightning" id="lightning"></div>
+
+            <!-- Question Container -->
+            <div class="question-container fade-in" id="question-container">
+                <div class="question-text" id="question-text"></div>
+                <div class="options" id="options"></div>
+            </div>
+
+            <!-- Sound Button -->
+            <div class="sound-btn" id="sound-btn">
+                <div class="sound-icon">🔊</div>
+            </div>
+
+            <!-- Boss Intro Screen -->
+            <div class="boss-intro" id="boss-intro">
+                <div class="boss-title" id="boss-title">1. BOSS</div>
+                <div class="boss-image" id="boss-image"></div>
+                <div id="boss-description">Elektrik dirençlerini aşarak ilerle!</div>
+                <button class="start-btn" id="start-btn">SAVAŞA BAŞLA</button>
+            </div>
+
+            <!-- Game Over Screen -->
+            <div class="game-over" id="game-over">
+                <div>ÖLDÜNÜZ!</div>
+                <div style="font-size: 16px; margin-top: 20px; color: white;">
+                    Öğretim modüllerindeki videoları ve<br>
+                    konu anlatımlarını tekrar gözden geçiriniz.
+                </div>
+                <div class="game-over-buttons">
+                    <button class="game-over-btn" id="retry-btn">🔁 TEKRAR DENE</button>
+                    <button class="game-over-btn" id="module-btn">📚 MODÜLE GİT</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="thunder-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-thunder-rumble-1700.mp3"
+        preload="auto"></audio>
+    <audio id="hit-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-explosion-2759.mp3"
+        preload="auto"></audio>
+    <audio id="critical-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3"
+        preload="auto"></audio>
+    <audio id="boss-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-monster-growl-1938.mp3"
+        preload="auto"></audio>
+    <audio id="select-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-quick-jump-arcade-game-239.mp3"
+        preload="auto"></audio>
+
+    <script>
+        // Game state
+        const gameState = {
+            playerHP: 3,
+            bossHP: 5,
+            combo: 0,
+            wrongAnswers: 0,
+            currentQuestion: 0,
+            currentBoss: 1,
+            maxBosses: 3,
+            attempts: 0,
+            maxAttempts: 2,
+            soundEnabled: true,
+            currentPokemon: 0,
+            pokemons: [
+                {
+                    id: 25,
+                    name: "Pikachu",
+                    image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png",
+                    abilities: [
+                        { name: "Şimşek Saldırısı", icon: "⚡", description: "Elektrik yüklü bir saldırı" },
+                        { name: "Hızlı Koşu", icon: "🏃", description: "Hızını artırır" }
+                    ]
+                },
+                {
+                    id: 135,
+                    name: "Jolteon",
+                    image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/135.png",
+                    abilities: [
+                        { name: "Yıldırım Hızı", icon: "⚡", description: "Süper hızlı saldırı" },
+                        { name: "Elektrik Alanı", icon: "🌀", description: "Elektrik alanı oluşturur" }
+                    ]
+                },
+                {
+                    id: 26,
+                    name: "Raichu",
+                    image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/26.png",
+                    abilities: [
+                        { name: "Güçlü Şok", icon: "⚡", description: "Güçlü elektrik şoku" },
+                        { name: "Kuyruk Saldırısı", icon: "💥", description: "Kuyrukla vurur" }
+                    ]
+                }
+            ],
+            bosses: [
+                {
+                    id: 466,
+                    name: "Electivire",
+                    image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/466.png",
+                    description: "Elektrik dirençlerini aşarak ilerle!"
+                },
+                {
+                    id: 462,
+                    name: "Magnezone",
+                    image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/462.png",
+                    description: "Manyetik alanları yenerek ilerle!"
+                },
+                {
+                    id: 479,
+                    name: "Rotom",
+                    image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/479.png",
+                    description: "Elektrik devrelerini çözerek ilerle!"
+                }
+            ],
+            questions: [
+                {
+                    question: "Elektrik devresinde akımı sağlayan kaynağa ne ad verilir?",
+                    options: [
+                        { text: "A) Direnç", correct: false },
+                        { text: "B) Pil", correct: true },
+                        { text: "C) Anahtar", correct: false },
+                        { text: "D) Ampul", correct: false }
+                    ]
+                },
+                {
+                    question: "Aşağıdakilerden hangisi elektrik enerjisini ışık enerjisine dönüştürür?",
+                    options: [
+                        { text: "A) Pil", correct: false },
+                        { text: "B) Motor", correct: false },
+                        { text: "C) Ampul", correct: true },
+                        { text: "D) Anahtar", correct: false }
+                    ]
+                },
+                {
+                    question: "Elektrik devresinde akımın yönünü değiştiren devre elemanı hangisidir?",
+                    options: [
+                        { text: "A) Direnç", correct: false },
+                        { text: "B) Pil", correct: false },
+                        { text: "C) Anahtar", correct: true },
+                        { text: "D) Ampul", correct: false }
+                    ]
+                },
+                {
+                    question: "Aşağıdakilerden hangisi iletken madde değildir?",
+                    options: [
+                        { text: "A) Bakır", correct: false },
+                        { text: "B) Demir", correct: false },
+                        { text: "C) Plastik", correct: true },
+                        { text: "D) Alüminyum", correct: false }
+                    ]
+                },
+                {
+                    question: "Elektrik devresinde akımın şiddetini ölçmek için kullanılan alet hangisidir?",
+                    options: [
+                        { text: "A) Voltmetre", correct: false },
+                        { text: "B) Ampermetre", correct: true },
+                        { text: "C) Ohmmetre", correct: false },
+                        { text: "D) Termometre", correct: false }
+                    ]
+                },
+                {
+                    question: "Aşağıdakilerden hangisi elektrik enerjisini hareket enerjisine dönüştürür?",
+                    options: [
+                        { text: "A) Ampul", correct: false },
+                        { text: "B) Motor", correct: true },
+                        { text: "C) Pil", correct: false },
+                        { text: "D) Direnç", correct: false }
+                    ]
+                },
+                {
+                    question: "Seri bağlı devrelerde hangisi doğrudur?",
+                    options: [
+                        { text: "A) Akım her yerde aynıdır", correct: true },
+                        { text: "B) Gerilim her yerde aynıdır", correct: false },
+                        { text: "C) Dirençler toplamı azalır", correct: false },
+                        { text: "D) Pil sayısı artmaz", correct: false }
+                    ]
+                },
+                {
+                    question: "Paralel bağlı devrelerde hangisi doğrudur?",
+                    options: [
+                        { text: "A) Akım her yerde aynıdır", correct: false },
+                        { text: "B) Gerilim her yerde aynıdır", correct: true },
+                        { text: "C) Dirençler toplamı artar", correct: false },
+                        { text: "D) Pil sayısı artar", correct: false }
+                    ]
+                },
+                {
+                    question: "Aşağıdakilerden hangisi elektrik çarpmasına karşı önlem değildir?",
+                    options: [
+                        { text: "A) Yalıtkan malzeme kullanmak", correct: false },
+                        { text: "B) Topraklama yapmak", correct: false },
+                        { text: "C) Sigorta kullanmak", correct: false },
+                        { text: "D) Islak elle prize dokunmak", correct: true }
+                    ]
+                },
+                {
+                    question: "Elektrik enerjisini depolayan devre elemanı hangisidir?",
+                    options: [
+                        { text: "A) Direnç", correct: false },
+                        { text: "B) Kondansatör", correct: true },
+                        { text: "C) Anahtar", correct: false },
+                        { text: "D) Ampul", correct: false }
+                    ]
+                }
+            ]
+        };
+
+        // DOM elements
+        const playerElement = document.getElementById('player');
+        const bossElement = document.getElementById('boss');
+        const playerHealthFill = document.getElementById('player-health-fill');
+        const bossHealthFill = document.getElementById('boss-health-fill');
+        const playerHealthText = document.getElementById('player-health-text');
+        const bossHealthText = document.getElementById('boss-health-text');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options');
+        const questionContainer = document.getElementById('question-container');
+        const comboCounter = document.getElementById('combo-counter');
+        const lightningElement = document.getElementById('lightning');
+        const gameOverScreen = document.getElementById('game-over');
+        const retryBtn = document.getElementById('retry-btn');
+        const moduleBtn = document.getElementById('module-btn');
+        const bossIntroScreen = document.getElementById('boss-intro');
+        const bossTitle = document.getElementById('boss-title');
+        const bossImage = document.getElementById('boss-image');
+        const bossDescription = document.getElementById('boss-description');
+        const startBtn = document.getElementById('start-btn');
+        const soundBtn = document.getElementById('sound-btn');
+        const soundIcon = soundBtn.querySelector('.sound-icon');
+        const pokemonSelector = document.getElementById('pokemon-selector');
+        const abilityContainer = document.getElementById('ability-container');
+
+        // Audio elements
+        const thunderSound = document.getElementById('thunder-sound');
+        const hitSound = document.getElementById('hit-sound');
+        const criticalSound = document.getElementById('critical-sound');
+        const bossSound = document.getElementById('boss-sound');
+        const selectSound = document.getElementById('select-sound');
+
+        // Initialize game
+        function initGame() {
+            // Reset game state
+            gameState.playerHP = 3;
+            gameState.bossHP = 5;
+            gameState.combo = 0;
+            gameState.wrongAnswers = 0;
+            gameState.currentQuestion = 0;
+            gameState.currentPokemon = 0;
+
+            // Set initial health bars
+            updateHealthBars();
+
+            // Hide game over screen
+            gameOverScreen.style.display = 'none';
+
+            // Show boss intro
+            showBossIntro();
+
+            // Setup pokemon selector
+            setupPokemonSelector();
+
+            // Keyboard event listeners
+            document.addEventListener('keydown', handleKeyDown);
+
+            // Button event listeners
+            retryBtn.addEventListener('click', retryGame);
+            moduleBtn.addEventListener('click', goToModule);
+            startBtn.addEventListener('click', startBattle);
+            soundBtn.addEventListener('click', toggleSound);
+
+            // Load pokemons from localStorage
+            loadPokemons();
+        }
+
+        // Load pokemons from localStorage
+        function loadPokemons() {
+            const savedPokemons = localStorage.getItem('pokemons');
+            if (savedPokemons) {
+                const pokemonIds = JSON.parse(savedPokemons);
+                gameState.pokemons = gameState.pokemons.filter(p => pokemonIds.includes(p.id));
+            } else {
+                // Default to just Pikachu if none are saved
+                gameState.pokemons = [gameState.pokemons[0]];
+            }
+
+            // Set current pokemon
+            changePokemon(0);
+        }
+
+        // Setup pokemon selector
+        function setupPokemonSelector() {
+            pokemonSelector.innerHTML = '';
+            gameState.pokemons.forEach((pokemon, index) => {
+                const btn = document.createElement('div');
+                btn.className = `pokemon-selector-btn ${index === 0 ? 'active' : ''}`;
+                btn.style.backgroundImage = `url(${pokemon.image})`;
+                btn.dataset.index = index;
+                btn.addEventListener('click', () => changePokemon(index));
+                pokemonSelector.appendChild(btn);
+            });
+        }
+
+        // Change current pokemon
+        function changePokemon(index) {
+            if (gameState.soundEnabled) {
+                selectSound.currentTime = 0;
+                selectSound.play();
+            }
+
+            gameState.currentPokemon = index;
+            playerElement.style.backgroundImage = `url(${gameState.pokemons[index].image})`;
+
+            // Update active class in selector
+            document.querySelectorAll('.pokemon-selector-btn').forEach((btn, i) => {
+                if (i === index) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        // Show boss intro
+        function showBossIntro() {
+            const boss = gameState.bosses[gameState.currentBoss - 1];
+            bossTitle.textContent = `${gameState.currentBoss}. BOSS - ${boss.name}`;
+            bossImage.style.backgroundImage = `url(${boss.image})`;
+            bossDescription.textContent = boss.description;
+            bossIntroScreen.style.display = 'flex';
+        }
+
+        // Start battle
+        function startBattle() {
+            if (gameState.soundEnabled) {
+                selectSound.currentTime = 0;
+                selectSound.play();
+            }
+
+            bossIntroScreen.style.display = 'none';
+            showQuestion();
+        }
+
+        // Toggle sound
+        function toggleSound() {
+            gameState.soundEnabled = !gameState.soundEnabled;
+            soundIcon.textContent = gameState.soundEnabled ? '🔊' : '🔇';
+        }
+
+        // Handle keyboard input
+        function handleKeyDown(e) {
+            // WASD or arrow keys for pokemon selection
+            if (e.key === 'w' || e.key === 'ArrowUp') {
+                changePokemon((gameState.currentPokemon - 1 + gameState.pokemons.length) % gameState.pokemons.length);
+            } else if (e.key === 's' || e.key === 'ArrowDown') {
+                changePokemon((gameState.currentPokemon + 1) % gameState.pokemons.length);
+            }
+
+            // Number keys for answer selection
+            if (e.key >= '1' && e.key <= '4') {
+                const optionIndex = parseInt(e.key) - 1;
+                if (optionIndex < gameState.questions[gameState.currentQuestion].options.length) {
+                    handleAnswer(optionIndex);
+                }
+            }
+        }
+
+        // Update health bars
+        function updateHealthBars() {
+            playerHealthFill.style.width = `${(gameState.playerHP / 3) * 100}%`;
+            bossHealthFill.style.width = `${(gameState.bossHP / 5) * 100}%`;
+            playerHealthText.textContent = `${gameState.playerHP}/3`;
+            bossHealthText.textContent = `${gameState.bossHP}/5`;
+
+            // Change color based on health
+            if (gameState.playerHP < 2) {
+                playerHealthFill.style.backgroundColor = '#F44336';
+            } else {
+                playerHealthFill.style.backgroundColor = '#4CAF50';
+            }
+        }
+
+        // Show current question
+        function showQuestion() {
+            // Get random question
+            const randomIndex = Math.floor(Math.random() * gameState.questions.length);
+            gameState.currentQuestion = randomIndex;
+            const currentQ = gameState.questions[randomIndex];
+
+            // Shuffle options
+            const shuffledOptions = [...currentQ.options].sort(() => Math.random() - 0.5);
+
+            // Fade in question container
+            questionContainer.classList.remove('fade-out');
+            questionContainer.classList.add('fade-in');
+            questionContainer.style.display = 'block';
+
+            // Set question text
+            questionText.textContent = currentQ.question;
+
+            // Clear options and recreate
+            optionsContainer.innerHTML = '';
+            shuffledOptions.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'option-btn';
+                button.textContent = option.text;
+                button.dataset.correct = option.correct;
+                button.addEventListener('click', () => handleAnswer(index));
+                optionsContainer.appendChild(button);
+            });
+
+            // Reset combo counter if no combo
+            if (gameState.combo === 0) {
+                comboCounter.style.display = 'none';
+            }
+
+            // Hide ability container
+            abilityContainer.style.display = 'none';
+        }
+
+        // Hide question container
+        function hideQuestion() {
+            questionContainer.classList.remove('fade-in');
+            questionContainer.classList.add('fade-out');
+
+            setTimeout(() => {
+                questionContainer.style.display = 'none';
+            }, 300);
+        }
+
+        // Handle answer selection
+        function handleAnswer(selectedIndex) {
+            const currentQ = gameState.questions[gameState.currentQuestion];
+            const shuffledOptions = [...currentQ.options].sort(() => Math.random() - 0.5); // Aynı karıştırma
+            const selectedOption = shuffledOptions[selectedIndex]; // Karıştırılmış diziden seç
+
+            // Tüm butonları devre dışı bırak
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.disabled = true;
+            });
+
+            // Seçilen butonu vurgula
+            const optionButtons = document.querySelectorAll('.option-btn');
+            optionButtons[selectedIndex].style.backgroundColor = selectedOption.correct ? '#4CAF50' : '#F44336';
+
+            if (selectedOption.correct) {
+                // Doğru cevap işlemleri
+                gameState.combo++;
+                gameState.wrongAnswers = 0;
+
+                // Combo güncelleme
+                if (gameState.combo >= 3) {
+                    comboCounter.textContent = `${gameState.combo} COMBO!`;
+                    comboCounter.style.display = 'flex';
+                    comboCounter.style.backgroundColor = '#F44336';
+                } else if (gameState.combo > 0) {
+                    comboCounter.textContent = `${gameState.combo}`;
+                    comboCounter.style.display = 'flex';
+                    comboCounter.style.backgroundColor = '#FFD700';
+                }
+
+                hideQuestion();
+                setTimeout(() => attackBoss(), 1000);
+            } else {
+                // Yanlış cevap işlemleri
+                gameState.combo = 0;
+                gameState.wrongAnswers++;
+                comboCounter.style.display = 'none';
+
+                hideQuestion();
+                setTimeout(() => bossAttack(), 1000);
+            }
+        }
+
+        // Boss attack animation
+        function bossAttack() {
+            if (gameState.soundEnabled) {
+                bossSound.currentTime = 0;
+                bossSound.play();
+            }
+
+            // Apply damage
+            gameState.playerHP -= 1;
+            if (gameState.playerHP < 0) gameState.playerHP = 0;
+            updateHealthBars();
+
+            // Boss attack animation - move forward
+            bossElement.style.animation = 'bossAttack 0.5s';
+
+            // Create punch effect
+            setTimeout(() => {
+                createPunchEffect(false);
+            }, 250);
+
+            // Flash player
+            playerElement.classList.add('flash');
+            setTimeout(() => {
+                playerElement.classList.remove('flash');
+            }, 1000);
+
+            // Check if game over
+            if (gameState.playerHP <= 0 || gameState.wrongAnswers >= 3) {
+                setTimeout(() => {
+                    gameOver();
+                }, 1000);
+                return;
+            }
+
+            // Reset animation after it completes and show next question
+            setTimeout(() => {
+                bossElement.style.animation = '';
+                showQuestion();
+            }, 1000);
+        }
+
+        // Player attack animation
+        function attackBoss() {
+            // Calculate damage
+            const damage = gameState.combo >= 3 ? 2 : 1;
+
+            // Apply damage
+            gameState.bossHP -= damage;
+            if (gameState.bossHP < 0) gameState.bossHP = 0;
+            updateHealthBars();
+
+            // Play sound
+            if (gameState.soundEnabled) {
+                if (gameState.combo >= 3) {
+                    criticalSound.currentTime = 0;
+                    criticalSound.play();
+                } else {
+                    hitSound.currentTime = 0;
+                    hitSound.play();
+                }
+            }
+
+            // Player attack animation - move forward
+            playerElement.style.animation = 'playerAttack 0.5s';
+
+            // Create lightning effect
+            setTimeout(() => {
+                createLightning();
+                createPunchEffect(true);
+            }, 250);
+
+            // Flash boss
+            bossElement.classList.add('flash');
+            setTimeout(() => {
+                bossElement.classList.remove('flash');
+            }, 1000);
+
+            // Check if boss is defeated
+            if (gameState.bossHP <= 0) {
+                setTimeout(() => {
+                    if (gameState.currentBoss < gameState.maxBosses) {
+                        // Next boss
+                        gameState.currentBoss++;
+                        showBossIntro();
+                    } else {
+                        // Game completed
+                        alert('Tebrikler! Tüm bossları yendiniz!');
+                        initGame(); // Restart game
+                    }
+                }, 1000);
+                return;
+            }
+
+            // Show abilities after attack
+            if (gameState.combo >= 2) {
+                showAbilities();
+            }
+
+            // Reset animation after it completes and show next question
+            setTimeout(() => {
+                playerElement.style.animation = '';
+                showQuestion();
+            }, 1000);
+        }
+
+        // Show abilities
+        function showAbilities() {
+            abilityContainer.innerHTML = '';
+            const pokemon = gameState.pokemons[gameState.currentPokemon];
+
+            pokemon.abilities.forEach((ability, index) => {
+                const abilityIcon = document.createElement('div');
+                abilityIcon.className = 'ability-icon';
+                abilityIcon.textContent = ability.icon;
+                abilityIcon.dataset.index = index;
+
+                const tooltip = document.createElement('div');
+                tooltip.className = 'ability-tooltip';
+                tooltip.innerHTML = `<strong>${ability.name}</strong><br>${ability.description}`;
+
+                abilityIcon.appendChild(tooltip);
+                abilityIcon.addEventListener('mouseenter', () => {
+                    tooltip.style.display = 'block';
+                });
+                abilityIcon.addEventListener('mouseleave', () => {
+                    tooltip.style.display = 'none';
+                });
+
+                abilityContainer.appendChild(abilityIcon);
+            });
+
+            abilityContainer.style.display = 'flex';
+        }
+
+        // Create lightning effect
+        function createLightning() {
+            if (gameState.soundEnabled) {
+                thunderSound.currentTime = 0;
+                thunderSound.play();
+            }
+
+            // Clear any existing lightning
+            lightningElement.innerHTML = '';
+            lightningElement.style.display = 'block';
+
+            // Create lightning lines between player and boss
+            const playerRect = playerElement.getBoundingClientRect();
+            const bossRect = bossElement.getBoundingClientRect();
+
+            const startX = playerRect.right;
+            const startY = playerRect.top + playerRect.height / 2;
+            const endX = bossRect.left;
+            const endY = bossRect.top + bossRect.height / 2;
+
+            // Calculate distance and angle
+            const dx = endX - startX;
+            const dy = endY - startY;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            const angle = Math.atan2(dy, dx);
+
+            // Main lightning line
+            const mainLine = document.createElement('div');
+            mainLine.className = 'lightning-line';
+            mainLine.style.left = `${startX}px`;
+            mainLine.style.top = `${startY}px`;
+            mainLine.style.width = `${distance}px`;
+            mainLine.style.transform = `rotate(${angle}rad)`;
+            mainLine.style.animation = 'zap 0.3s forwards';
+            lightningElement.appendChild(mainLine);
+
+            // Create some random branches
+            for (let i = 0; i < 5; i++) {
+                const branch = document.createElement('div');
+                branch.className = 'lightning-line';
+
+                const branchStartX = startX + Math.random() * distance * 0.8;
+                const branchStartY = startY + (Math.random() - 0.5) * 50;
+                const branchLength = 20 + Math.random() * 50;
+                const branchAngle = Math.random() * Math.PI * 2;
+
+                branch.style.left = `${branchStartX}px`;
+                branch.style.top = `${branchStartY}px`;
+                branch.style.width = `${branchLength}px`;
+                branch.style.transform = `rotate(${branchAngle}rad)`;
+                branch.style.animation = 'zap 0.3s forwards';
+                lightningElement.appendChild(branch);
+            }
+
+            // Hide lightning after animation
+            setTimeout(() => {
+                lightningElement.style.display = 'none';
+            }, 300);
+        }
+
+        // Create punch effect (for both player and boss attacks)
+        function createPunchEffect(isPlayerAttack) {
+            if (gameState.soundEnabled) {
+                hitSound.currentTime = 0;
+                hitSound.play();
+            }
+
+            const effect = document.createElement('div');
+            effect.style.position = 'absolute';
+            effect.style.width = '100px';
+            effect.style.height = '100px';
+            effect.style.background = 'radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%)';
+            effect.style.borderRadius = '50%';
+            effect.style.pointerEvents = 'none';
+            effect.style.zIndex = '8';
+
+            if (isPlayerAttack) {
+                const bossRect = bossElement.getBoundingClientRect();
+                effect.style.left = `${bossRect.left + bossRect.width / 2 - 50}px`;
+                effect.style.top = `${bossRect.top + bossRect.height / 2 - 50}px`;
+            } else {
+                const playerRect = playerElement.getBoundingClientRect();
+                effect.style.left = `${playerRect.left + playerRect.width / 2 - 50}px`;
+                effect.style.top = `${playerRect.top + playerRect.height / 2 - 50}px`;
+            }
+
+            document.querySelector('.game-container').appendChild(effect);
+
+            // Animate effect
+            let scale = 1;
+            const grow = setInterval(() => {
+                scale += 0.1;
+                effect.style.transform = `scale(${scale})`;
+                effect.style.opacity = 1 - (scale - 1) * 0.5;
+
+                if (scale >= 2) {
+                    clearInterval(grow);
+                    effect.remove();
+                }
+            }, 30);
+        }
+
+        // Game over
+        function gameOver() {
+            gameState.attempts++;
+
+            if (gameState.attempts > gameState.maxAttempts) {
+                // Redirect to module after max attempts
+                setTimeout(() => {
+                    window.location.href = "module.html";
+                }, 2000);
+            }
+
+            gameOverScreen.style.display = 'flex';
+        }
+
+        // Retry game
+        function retryGame() {
+            if (gameState.soundEnabled) {
+                selectSound.currentTime = 0;
+                selectSound.play();
+            }
+
+            initGame();
+        }
+
+        // Go to module
+        function goToModule() {
+            if (gameState.soundEnabled) {
+                selectSound.currentTime = 0;
+                selectSound.play();
+            }
+
+            window.location.href = "ogrenci.html";
+        }
+
+        // Initialize the game when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initGame);
+    </script>
+    <!-- <p
+        style="border-radius: 8px; text-align: center; font-size: 12px; color: #fff; margin-top: 16px;position: fixed; left: 8px; bottom: 8px; z-index: 10; background: rgba(0, 0, 0, 0.8); padding: 4px 8px;">
+        Made with <img src="https://enzostvs-deepsite.hf.space/logo.svg" alt="DeepSite Logo"
+            style="width: 16px; height: 16px; vertical-align: middle;display:inline-block;margin-right:3px;filter:brightness(0) invert(1);"><a
+            href="https://enzostvs-deepsite.hf.space" style="color: #fff;text-decoration: underline;"
+            target="_blank">DeepSite</a> - 🧬 <a href="https://enzostvs-deepsite.hf.space?remix=aycanurkaya/buz-k-rma"
+            style="color: #fff;text-decoration: underline;" target="_blank">Remix</a></p> -->
+</body>
+
+</html>
